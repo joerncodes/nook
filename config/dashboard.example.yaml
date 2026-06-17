@@ -15,6 +15,7 @@ center:
   - type: readwise
     title: Readwise daily review
     showImage: true # show book/article cover, flexed to the left
+    hideWhenDone: true # collapse the whole widget once you've finished the review
     # Get your token at https://readwise.io/access_token
     token: REPLACE_WITH_YOUR_READWISE_TOKEN
 
@@ -37,6 +38,14 @@ columns:
           - Review PRs
           - Plan sprint
   - widgets:
+      - type: weather
+        title: Köln
+        # Look up lat/lon at https://www.latlong.net/ or any maps app
+        lat: 50.9375
+        lon: 6.9603
+        label: Köln
+        units: metric # metric | imperial
+        days: 3 # 0 hides the forecast strip; max 7
       - type: links
         title: Reading
         columns: 1
@@ -64,6 +73,9 @@ columns:
         apiKey: REPLACE_WITH_YOUR_IMMICH_API_KEY
         favorites: true # OR: albumId: <album-id>
         limit: 6
+        autoRotate: true # set false to require manual → clicks
+        stats: true # set false to hide the photos/videos/storage row
+        # orientation: portrait # optional: landscape | portrait — filter by aspect ratio
       - type: jellyfin
         title: Library
         baseUrl: https://jellyfin.your.domain

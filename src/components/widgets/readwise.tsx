@@ -1,9 +1,13 @@
 import { fetchDailyReview } from "@/lib/readwise";
 import { ReadwiseClient } from "./readwise-client";
 
-type Props = { token: string; showImage?: boolean };
+type Props = { token: string; showImage?: boolean; hideWhenDone?: boolean };
 
-export async function ReadwiseWidget({ token, showImage = false }: Props) {
+export async function ReadwiseWidget({
+  token,
+  showImage = false,
+  hideWhenDone = false,
+}: Props) {
   try {
     const review = await fetchDailyReview(token);
     return (
@@ -12,6 +16,7 @@ export async function ReadwiseWidget({ token, showImage = false }: Props) {
         reviewUrl={review.review_url}
         highlights={review.highlights}
         showImage={showImage}
+        hideWhenDone={hideWhenDone}
       />
     );
   } catch (err) {

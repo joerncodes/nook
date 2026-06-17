@@ -481,7 +481,14 @@
   font-style: italic;
   letter-spacing: 0;
   text-transform: lowercase;
-  color: var(--muted-foreground);
+  color: var(--accent-foreground);
+  text-align: right;
+  display: block;
+  width: 100%;
+}
+/* Self-titled widgets (jellyfin) render their own header — right-align the
+   container so the inline-block title link pushes to the right too. */
+[data-theme="marginalia"] .jellyfin-header {
   text-align: right;
 }
 
@@ -1338,6 +1345,16 @@
   font-style: italic;
 }
 
+/* hideWhenDone: collapse the entire wrapping card when the marker is present.
+   Also collapses center-column container so no empty gap remains. */
+.readwise-hidden {
+  display: none;
+}
+[data-slot="card"]:has(.readwise-hidden),
+.center-widget:has(.readwise-hidden) {
+  display: none;
+}
+
 /* Empty state — themed inline via .readwise-empty */
 .readwise-empty {
   color: var(--muted-foreground);
@@ -1719,4 +1736,323 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   opacity: 0.5;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Weather widget — Open-Meteo, FA Pro thin icons (masked → currentColor)
+   ════════════════════════════════════════════════════════════════════ */
+
+.weather {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.weather-current {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.weather-current-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.weather-temp {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.weather-temp-num {
+  font-size: 2.6rem;
+}
+.weather-temp-unit {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+}
+.weather-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--muted-foreground);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.weather-meta-sep {
+  opacity: 0.5;
+}
+.weather-forecast {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.weather-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.weather-day-name {
+  color: var(--muted-foreground);
+}
+.weather-day-temps {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.weather-day-min {
+  color: var(--muted-foreground);
+  opacity: 0.65;
+}
+.weather-empty {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+/* Icon — mask-based so the SVG inherits any color via currentColor */
+.weather-icon {
+  display: inline-block;
+  background-color: currentColor;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  flex: 0 0 auto;
+}
+.weather-icon-md { width: 22px; height: 22px; }
+.weather-icon-lg { width: 56px; height: 56px; }
+
+.weather-icon[data-icon="sun"]           { mask-image: url('/icons/weather/sun.svg');           -webkit-mask-image: url('/icons/weather/sun.svg'); }
+.weather-icon[data-icon="cloud-sun"]     { mask-image: url('/icons/weather/cloud-sun.svg');     -webkit-mask-image: url('/icons/weather/cloud-sun.svg'); }
+.weather-icon[data-icon="cloud"]         { mask-image: url('/icons/weather/cloud.svg');         -webkit-mask-image: url('/icons/weather/cloud.svg'); }
+.weather-icon[data-icon="cloud-fog"]     { mask-image: url('/icons/weather/cloud-fog.svg');     -webkit-mask-image: url('/icons/weather/cloud-fog.svg'); }
+.weather-icon[data-icon="cloud-drizzle"] { mask-image: url('/icons/weather/cloud-drizzle.svg'); -webkit-mask-image: url('/icons/weather/cloud-drizzle.svg'); }
+.weather-icon[data-icon="cloud-rain"]    { mask-image: url('/icons/weather/cloud-rain.svg');    -webkit-mask-image: url('/icons/weather/cloud-rain.svg'); }
+.weather-icon[data-icon="cloud-snow"]    { mask-image: url('/icons/weather/cloud-snow.svg');    -webkit-mask-image: url('/icons/weather/cloud-snow.svg'); }
+.weather-icon[data-icon="cloud-bolt"]    { mask-image: url('/icons/weather/cloud-bolt.svg');    -webkit-mask-image: url('/icons/weather/cloud-bolt.svg'); }
+
+/* ─── Quartz — eyebrow labels, tabular mono, hairline strip ─── */
+[data-theme="quartz"] .weather {
+  font-family: var(--font-mono);
+}
+[data-theme="quartz"] .weather-temp-num {
+  font-size: 2.4rem;
+  letter-spacing: -0.02em;
+}
+[data-theme="quartz"] .weather-temp-unit {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+[data-theme="quartz"] .weather-meta {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+[data-theme="quartz"] .weather-current .weather-icon-lg {
+  color: var(--signal);
+}
+[data-theme="quartz"] .weather-forecast {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+[data-theme="quartz"] .weather-day-name {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+[data-theme="quartz"] .weather-day-temps {
+  font-size: 12px;
+}
+[data-theme="quartz"] .weather-empty {
+  font-family: var(--font-mono);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+}
+
+/* ─── Atrium — big italic Fraunces temp, soft muted accent on icon ─── */
+[data-theme="atrium"] .weather {
+  gap: 28px;
+}
+[data-theme="atrium"] .weather-temp-num {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 4rem;
+}
+[data-theme="atrium"] .weather-temp-unit {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+}
+[data-theme="atrium"] .weather-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+[data-theme="atrium"] .weather-current .weather-icon-lg {
+  width: 64px;
+  height: 64px;
+  color: var(--muted-foreground);
+  opacity: 0.85;
+}
+[data-theme="atrium"] .weather-day {
+  gap: 8px;
+}
+[data-theme="atrium"] .weather-day-name {
+  font-family: var(--font-heading);
+  font-style: italic;
+  text-transform: lowercase;
+  font-size: 13px;
+}
+[data-theme="atrium"] .weather-day-temps {
+  font-family: var(--font-sans);
+  font-size: 13px;
+}
+[data-theme="atrium"] .weather-day .weather-icon-md {
+  color: var(--muted-foreground);
+}
+[data-theme="atrium"] .weather-empty {
+  font-family: var(--font-heading);
+  font-style: italic;
+  text-transform: lowercase;
+}
+
+/* ─── Marginalia — almanac entry: iron-gall ink temp, rubricated vignette icon ─── */
+[data-theme="marginalia"] .weather {
+  gap: 16px;
+}
+[data-theme="marginalia"] .weather-current {
+  align-items: center;
+  gap: 14px;
+}
+[data-theme="marginalia"] .weather-current .weather-icon-lg {
+  width: 72px;
+  height: 72px;
+  color: var(--signal); /* rubricated vermillion ornament */
+}
+[data-theme="marginalia"] .weather-current-text {
+  gap: 6px;
+}
+[data-theme="marginalia"] .weather-temp {
+  align-items: flex-start;
+  gap: 2px;
+}
+[data-theme="marginalia"] .weather-temp-num {
+  font-family: var(--font-fraunces);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 3.5rem;
+  line-height: 0.9;
+  color: var(--accent-foreground); /* iron-gall blue ink */
+  letter-spacing: -0.02em;
+}
+[data-theme="marginalia"] .weather-temp-unit {
+  font-family: var(--font-source-serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--accent-foreground);
+  opacity: 0.6;
+  letter-spacing: 0;
+  text-transform: none;
+  font-variant-caps: normal;
+  font-feature-settings: normal;
+  padding-top: 4px;
+}
+[data-theme="marginalia"] .weather-meta {
+  font-family: var(--font-source-serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--muted-foreground);
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+[data-theme="marginalia"] .weather-label {
+  display: none; /* card title already shows the place */
+}
+[data-theme="marginalia"] .weather-meta-sep {
+  display: none;
+}
+
+/* Forecast — three almanac cells with hairline gutters */
+[data-theme="marginalia"] .weather-forecast {
+  gap: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+[data-theme="marginalia"] .weather-forecast::before {
+  /* gold-thread accent — the marginalia signature */
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 28px;
+  height: 1px;
+  background: var(--signal);
+}
+[data-theme="marginalia"] .weather-day {
+  gap: 8px;
+  padding: 0 8px;
+  position: relative;
+}
+[data-theme="marginalia"] .weather-day + .weather-day::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--border);
+}
+[data-theme="marginalia"] .weather-day-name {
+  font-family: var(--font-source-serif);
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "c2sc" 1, "smcp" 1;
+  letter-spacing: 0.06em;
+  font-size: 12px;
+  color: var(--accent-foreground);
+  font-weight: 600;
+}
+[data-theme="marginalia"] .weather-day .weather-icon-md {
+  width: 24px;
+  height: 24px;
+  color: var(--muted-foreground);
+}
+[data-theme="marginalia"] .weather-day-temps {
+  font-family: var(--font-source-serif);
+  font-size: 14px;
+  gap: 4px;
+  align-items: baseline;
+}
+[data-theme="marginalia"] .weather-day-max {
+  color: var(--foreground);
+  font-weight: 500;
+}
+[data-theme="marginalia"] .weather-day-min {
+  color: var(--muted-foreground);
+  font-style: italic;
+  font-size: 12px;
+  opacity: 0.7;
+}
+[data-theme="marginalia"] .weather-empty {
+  font-family: var(--font-source-serif);
+  font-style: italic;
 }

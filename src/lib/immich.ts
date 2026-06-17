@@ -28,14 +28,27 @@ export type ImmichSource =
   | { kind: "favorites" }
   | { kind: "album"; albumId: string };
 
+export type ImmichOrientation = "landscape" | "portrait";
+
+function matchesOrientation(a: ImmichAsset, want: ImmichOrientation): boolean {
+  if (!a.width || !a.height) return false;
+  return want === "landscape" ? a.width > a.height : a.height > a.width;
+}
+
 export async function fetchImmichAssets(opts: {
   baseUrl: string;
   apiKey: string;
   source: ImmichSource;
   limit: number;
+  orientation?: ImmichOrientation;
 }): Promise<ImmichAsset[]> {
+  // Immich has no orientation filter — over-fetch and filter client-side when set.
+  const fetchSize = opts.orientation
+    ? Math.min(opts.limit * 5, 100)
+    : opts.limit;
+
   const body: MetadataSearchBody = {
-    size: opts.limit,
+    size: fetchSize,
     type: "IMAGE",
     order: "desc",
   };
@@ -60,7 +73,13 @@ export async function fetchImmichAssets(opts: {
     throw new Error(`Immich: ${res.status} ${res.statusText}`);
   }
   const json = (await res.json()) as SearchResponse;
-  return json.assets?.items ?? [];
+  const items = json.assets?.items ?? [];
+
+  if (opts.orientation) {
+    const want = opts.orientation;
+    return items.filter((a) => matchesOrientation(a, want)).slice(0, opts.limit);
+  }
+  return items.slice(0, opts.limit);
 }
 
 export type ImmichStatistics = {

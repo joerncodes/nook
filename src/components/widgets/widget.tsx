@@ -11,6 +11,7 @@ import { TodoistWidget } from "./todoist";
 import { ImmichWidget } from "./immich";
 import { JellyfinWidget } from "./jellyfin";
 import { EdgewiseWidget } from "./edgewise";
+import { WeatherWidget } from "./weather";
 
 function renderBody(w: Widget) {
   switch (w.type) {
@@ -35,7 +36,13 @@ function renderBody(w: Widget) {
     case "greeting":
       return <GreetingWidget name={w.name} />;
     case "readwise":
-      return <ReadwiseWidget token={w.token} showImage={w.showImage} />;
+      return (
+        <ReadwiseWidget
+          token={w.token}
+          showImage={w.showImage}
+          hideWhenDone={w.hideWhenDone}
+        />
+      );
     case "todoist":
       return (
         <TodoistWidget
@@ -53,6 +60,9 @@ function renderBody(w: Widget) {
           favorites={w.favorites}
           albumId={w.albumId}
           limit={w.limit}
+          autoRotate={w.autoRotate}
+          orientation={w.orientation}
+          stats={w.stats}
         />
       );
     case "jellyfin":
@@ -70,6 +80,16 @@ function renderBody(w: Widget) {
           baseUrl={w.baseUrl}
           token={w.token}
           limit={w.limit}
+        />
+      );
+    case "weather":
+      return (
+        <WeatherWidget
+          lat={w.lat}
+          lon={w.lon}
+          label={w.label}
+          units={w.units}
+          days={w.days}
         />
       );
   }

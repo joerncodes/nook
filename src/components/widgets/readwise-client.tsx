@@ -8,6 +8,7 @@ type Props = {
   reviewUrl: string;
   highlights: ReadwiseHighlight[];
   showImage?: boolean;
+  hideWhenDone?: boolean;
 };
 
 type Progress = { index: number; completed: boolean };
@@ -48,6 +49,7 @@ export function ReadwiseClient({
   reviewUrl,
   highlights,
   showImage = false,
+  hideWhenDone = false,
 }: Props) {
   const total = highlights.length;
   const [hydrated, setHydrated] = useState(false);
@@ -143,6 +145,9 @@ export function ReadwiseClient({
   }
 
   if (progress.completed) {
+    if (hideWhenDone) {
+      return <article className="readwise readwise-hidden" aria-hidden />;
+    }
     return (
       <article className="readwise" data-state="done">
         <p className="readwise-done-line">Done — see you tomorrow.</p>

@@ -13,6 +13,7 @@ type Props = {
   baseUrl: string;
   assets: Asset[];
   intervalMs?: number;
+  autoRotate?: boolean;
 };
 
 function pad(n: number, width: number) {
@@ -23,18 +24,19 @@ export function ImmichCarousel({
   baseUrl,
   assets,
   intervalMs = 8000,
+  autoRotate = true,
 }: Props) {
   const total = assets.length;
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    if (paused || total < 2) return;
+    if (!autoRotate || paused || total < 2) return;
     const t = setInterval(() => {
       setI((prev) => (prev + 1) % total);
     }, intervalMs);
     return () => clearInterval(t);
-  }, [total, paused, intervalMs]);
+  }, [total, paused, intervalMs, autoRotate]);
 
   const current = assets[i];
   const cleanBase = baseUrl.replace(/\/$/, "");

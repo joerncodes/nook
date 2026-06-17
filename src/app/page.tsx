@@ -52,7 +52,7 @@ export default async function Home() {
 
   const { left, right } = splitColumns(config.columns);
 
-  const sideWidth = (count: number) => (count > 0 ? `${count * 18}rem` : "0fr");
+  const sideWidth = (count: number) => (count > 0 ? `${count * 23.4}rem` : "0fr");
 
   const themeGap =
     theme === "atrium" ? "gap-14" : theme === "marginalia" ? "gap-10" : "gap-6";

@@ -57,6 +57,7 @@ const readwiseWidget = baseWidget.extend({
   type: z.literal("readwise"),
   token: z.string().min(1),
   showImage: z.boolean().optional().default(false),
+  hideWhenDone: z.boolean().optional().default(false),
 });
 
 const todoistWidget = baseWidget.extend({
@@ -74,6 +75,9 @@ const immichWidget = baseWidget.extend({
   favorites: z.boolean().optional().default(false),
   albumId: z.string().optional(),
   limit: z.number().int().min(1).max(20).optional().default(6),
+  autoRotate: z.boolean().optional().default(true),
+  orientation: z.enum(["landscape", "portrait"]).optional(),
+  stats: z.boolean().optional().default(true),
 });
 
 const jellyfinWidget = baseWidget.extend({
@@ -90,6 +94,15 @@ const edgewiseWidget = baseWidget.extend({
   limit: z.number().int().min(1).max(20).optional().default(5),
 });
 
+const weatherWidget = baseWidget.extend({
+  type: z.literal("weather"),
+  lat: z.number().min(-90).max(90),
+  lon: z.number().min(-180).max(180),
+  label: z.string().optional(),
+  units: z.enum(["metric", "imperial"]).optional().default("metric"),
+  days: z.number().int().min(0).max(7).optional().default(3),
+});
+
 export const widgetSchema = z.discriminatedUnion("type", [
   clockWidget,
   searchWidget,
@@ -102,6 +115,7 @@ export const widgetSchema = z.discriminatedUnion("type", [
   immichWidget,
   jellyfinWidget,
   edgewiseWidget,
+  weatherWidget,
 ]);
 
 export type Widget = z.infer<typeof widgetSchema>;

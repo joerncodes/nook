@@ -14,6 +14,9 @@ type Props = {
   favorites?: boolean;
   albumId?: string;
   limit?: number;
+  autoRotate?: boolean;
+  orientation?: "landscape" | "portrait";
+  stats?: boolean;
 };
 
 function resolveSource(p: Props): ImmichSource | { error: string } {
@@ -26,12 +29,12 @@ function formatGb(bytes: number): string {
   return `${(bytes / 1e9).toFixed(1)} GB`;
 }
 
-function renderMedia(baseUrl: string, assets: ImmichAsset[]) {
+function renderMedia(baseUrl: string, assets: ImmichAsset[], autoRotate: boolean) {
   if (assets.length === 0) {
     return <p className="immich-empty">No photos yet.</p>;
   }
   if (assets.length > 1) {
-    return <ImmichCarousel baseUrl={baseUrl} assets={assets} />;
+    return <ImmichCarousel baseUrl={baseUrl} assets={assets} autoRotate={autoRotate} />;
   }
   const a = assets[0];
   const ratio = a.width && a.height ? `${a.width} / ${a.height}` : "3 / 2";
@@ -61,6 +64,9 @@ export async function ImmichWidget({
   favorites = false,
   albumId,
   limit = 6,
+  autoRotate = true,
+  orientation,
+  stats: showStats = true,
 }: Props) {
   const source = resolveSource({ baseUrl, apiKey, favorites, albumId, limit });
   if ("error" in source) {
@@ -71,10 +77,11 @@ export async function ImmichWidget({
   let stats: ImmichStatistics | null = null;
   let error: string | null = null;
   try {
-    [assets, stats] = await Promise.all([
-      fetchImmichAssets({ baseUrl, apiKey, source, limit }),
-      fetchImmichStatistics({ baseUrl, apiKey }),
-    ]);
+    const assetsP = fetchImmichAssets({ baseUrl, apiKey, source, limit, orientation });
+    const statsP = showStats
+      ? fetchImmichStatistics({ baseUrl, apiKey })
+      : Promise.resolve(null);
+    [assets, stats] = await Promise.all([assetsP, statsP]);
   } catch (e) {
     error = e instanceof Error ? e.message : "failed to fetch";
   }
@@ -85,8 +92,8 @@ export async function ImmichWidget({
 
   return (
     <div className="immich">
-      {renderMedia(baseUrl, assets)}
-      {stats && (
+      {renderMedia(baseUrl, assets, autoRotate)}
+      {showStats && stats && (
         <dl className="widget-counts">
           <WidgetStat label="Photos" value={stats.photos} />
           <WidgetStat label="Videos" value={stats.videos} />
