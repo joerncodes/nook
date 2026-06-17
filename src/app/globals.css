@@ -1,26 +1,1063 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-heading);
+  --font-clock: var(--font-clock);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-signal: var(--signal);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* Fallback (only used if no data-theme set) */
+  --background: #efede7;
+  --foreground: #1b1d1f;
+  --card: #efede7;
+  --card-foreground: #1b1d1f;
+  --popover: #efede7;
+  --popover-foreground: #1b1d1f;
+  --primary: #1b1d1f;
+  --primary-foreground: #efede7;
+  --secondary: #d7d4cc;
+  --secondary-foreground: #1b1d1f;
+  --muted: #d7d4cc;
+  --muted-foreground: #5a5e62;
+  --accent: #d7d4cc;
+  --accent-foreground: #1b1d1f;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #c9c7c0;
+  --input: #c9c7c0;
+  --ring: #c1440e;
+  --signal: #c1440e;
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0;
+  --sidebar: #efede7;
+  --sidebar-foreground: #1b1d1f;
+  --sidebar-primary: #1b1d1f;
+  --sidebar-primary-foreground: #efede7;
+  --sidebar-accent: #d7d4cc;
+  --sidebar-accent-foreground: #1b1d1f;
+  --sidebar-border: #c9c7c0;
+  --sidebar-ring: #c1440e;
+
+  --font-sans: var(--font-jetbrains-mono);
+  --font-heading: var(--font-jetbrains-mono);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-clock: var(--font-jetbrains-mono);
+}
+
+.dark {
+  --background: #0e0f10;
+  --foreground: #e8e6de;
+  --card: #0e0f10;
+  --card-foreground: #e8e6de;
+  --muted-foreground: #82858a;
+  --border: #272a2d;
+  --signal: #e8923c;
+  --ring: #e8923c;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   QUARTZ — instrument typography. Mono everywhere. Tabular rows.
+   ════════════════════════════════════════════════════════════════════ */
+[data-theme="quartz"] {
+  --background: #efede7;
+  --foreground: #1b1d1f;
+  --card: #efede7;
+  --card-foreground: #1b1d1f;
+  --popover: #efede7;
+  --popover-foreground: #1b1d1f;
+  --primary: #1b1d1f;
+  --primary-foreground: #efede7;
+  --secondary: #e0ddd5;
+  --secondary-foreground: #1b1d1f;
+  --muted: #e0ddd5;
+  --muted-foreground: #5a5e62;
+  --accent: #e0ddd5;
+  --accent-foreground: #c1440e;
+  --border: #c9c7c0;
+  --input: #c9c7c0;
+  --ring: #c1440e;
+  --signal: #c1440e;
+  --radius: 0;
+
+  --font-sans: var(--font-jetbrains-mono);
+  --font-heading: var(--font-jetbrains-mono);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-clock: var(--font-jetbrains-mono);
+}
+
+.dark [data-theme="quartz"],
+[data-theme="quartz"].dark,
+[data-theme="quartz"]:is(.dark *) {
+  --background: #0e0f10;
+  --foreground: #e8e6de;
+  --card: #0e0f10;
+  --card-foreground: #e8e6de;
+  --secondary: #1a1c1e;
+  --muted: #1a1c1e;
+  --muted-foreground: #82858a;
+  --accent: #1a1c1e;
+  --accent-foreground: #e8923c;
+  --border: #272a2d;
+  --input: #272a2d;
+  --ring: #e8923c;
+  --signal: #e8923c;
+}
+
+/* Quartz-specific structural rules */
+[data-theme="quartz"] [data-slot="card"] {
+  --card-spacing: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  --tw-ring-shadow: none;
+  border-bottom: 1px solid var(--border);
+  padding: 18px 0 18px 0;
+  overflow: visible;
+}
+[data-theme="quartz"] [data-slot="card-header"] {
+  padding: 0 0 12px 0;
+}
+[data-theme="quartz"] [data-slot="card-content"] {
+  padding: 0;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   ATRIUM — air, lowercase, time-of-day. Bg tints across the day.
+   ════════════════════════════════════════════════════════════════════ */
+[data-theme="atrium"] {
+  /* Default = morning, overridden by data-phase below */
+  --background: #e8e5de;
+  --foreground: #2a2722;
+  --card: #e8e5de;
+  --card-foreground: #2a2722;
+  --popover: #e8e5de;
+  --popover-foreground: #2a2722;
+  --primary: #2a2722;
+  --primary-foreground: #e8e5de;
+  --secondary: #ddd9d0;
+  --secondary-foreground: #2a2722;
+  --muted: #ddd9d0;
+  --muted-foreground: #857f72;
+  --accent: #ddd9d0;
+  --accent-foreground: #6f4a2e;
+  --border: #d2cdc2;
+  --input: #d2cdc2;
+  --ring: #6f4a2e;
+  --signal: #6f4a2e;
+  --radius: 0;
+
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-fraunces);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-clock: var(--font-fraunces);
+
+  transition: background-color 600ms ease, color 600ms ease;
+}
+
+[data-theme="atrium"][data-phase="midday"] {
+  --background: #efe8d9;
+  --foreground: #2a2722;
+  --card: #efe8d9;
+  --card-foreground: #2a2722;
+  --muted-foreground: #857f6f;
+  --border: #d8d0bd;
+  --ring: #b5462e;
+  --signal: #b5462e;
+}
+
+[data-theme="atrium"][data-phase="dusk"] {
+  --background: #e0cfd0;
+  --foreground: #34232a;
+  --card: #e0cfd0;
+  --card-foreground: #34232a;
+  --muted-foreground: #7a6469;
+  --border: #c9b6b8;
+  --ring: #5c2d5a;
+  --signal: #5c2d5a;
+}
+
+[data-theme="atrium"][data-phase="night"] {
+  --background: #dcd8ce;
+  --foreground: #2a2722;
+  --card: #dcd8ce;
+  --card-foreground: #2a2722;
+  --muted-foreground: #807a6f;
+  --border: #c7c1b2;
+  --ring: #3a4250;
+  --signal: #3a4250;
+}
+
+.dark [data-theme="atrium"],
+[data-theme="atrium"]:is(.dark *) {
+  --background: #181b1f;
+  --foreground: #e5e2d8;
+  --card: #181b1f;
+  --card-foreground: #e5e2d8;
+  --muted-foreground: #7e807f;
+  --border: #252a2f;
+  --ring: #c39b6a;
+  --signal: #c39b6a;
+}
+
+/* Atrium-specific: dissolve cards entirely, only air separates widgets. */
+[data-theme="atrium"] [data-slot="card"] {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  --tw-ring-shadow: none;
+  border: none;
+  padding: 0;
+  overflow: visible;
+  --card-spacing: 0;
+}
+[data-theme="atrium"] [data-slot="card-header"] {
+  padding: 0 0 14px 0;
+}
+[data-theme="atrium"] [data-slot="card-content"] {
+  padding: 0;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   MARGINALIA — commonplace book. Source Serif everywhere. Iron-gall ink.
+   ════════════════════════════════════════════════════════════════════ */
+[data-theme="marginalia"] {
+  --background: #eae4d3;
+  --foreground: #1a2030;
+  --card: #eae4d3;
+  --card-foreground: #1a2030;
+  --popover: #eae4d3;
+  --popover-foreground: #1a2030;
+  --primary: #1a2030;
+  --primary-foreground: #eae4d3;
+  --secondary: #e0d9c4;
+  --secondary-foreground: #1a2030;
+  --muted: #e0d9c4;
+  --muted-foreground: #6b6657;
+  --accent: #e0d9c4;
+  --accent-foreground: #2a4f8c;
+  --border: #ccc4ac;
+  --input: #ccc4ac;
+  --ring: #2a4f8c;
+  --signal: #a02d2d;
+  --radius: 0;
+
+  --font-sans: var(--font-source-serif);
+  --font-heading: var(--font-source-serif);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-clock: var(--font-fraunces);
+}
+
+.dark [data-theme="marginalia"],
+[data-theme="marginalia"]:is(.dark *) {
+  --background: #1b1814;
+  --foreground: #e6dfcb;
+  --card: #1b1814;
+  --card-foreground: #e6dfcb;
+  --muted-foreground: #8a8273;
+  --border: #2e2a22;
+  --ring: #7aa0de;
+  --signal: #d04f4f;
+}
+
+/* Marginalia-specific: marginalia title style, gold-thread divider, no boxes */
+[data-theme="marginalia"] [data-slot="card"] {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  --tw-ring-shadow: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 20px 0 20px 0;
+  overflow: visible;
+  --card-spacing: 0;
+}
+[data-theme="marginalia"] [data-slot="card-header"] {
+  padding: 0 0 14px 0;
+}
+[data-theme="marginalia"] [data-slot="card-content"] {
+  padding: 0;
+}
+[data-theme="marginalia"] [data-slot="card-title"] {
+  font-family: var(--font-source-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: lowercase;
+  color: var(--muted-foreground);
+  text-align: right;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
+/* ════════════════════════════════════════════════════════════════════
+   Theme-shared signature pieces
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Quartz second-tick — pulses the amber bar once per second. */
+@keyframes quartz-tick {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0.25; transform: scaleY(0.6); }
+}
+.quartz-tick {
+  animation: quartz-tick 1s steps(2, end) infinite;
+  transform-origin: center;
+}
+
+/* ─────────── Greeting widget — per-theme ─────────── */
+.greeting-widget {
+  display: block;
+}
+.greeting-dropcap,
+.greeting-rest,
+.greeting-name {
+  display: inline;
+}
+
+/* Quartz: small, mono, uppercase, signal-colored prefix */
+[data-theme="quartz"] .greeting-widget {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+[data-theme="quartz"] .greeting-word {
+  text-decoration: none;
+}
+[data-theme="quartz"] .greeting-dropcap {
+  color: var(--signal);
+}
+
+/* Atrium: large italic display, lowercase, low-weight */
+[data-theme="atrium"] .greeting-widget {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  line-height: 1.1;
+  font-style: italic;
+  font-weight: 300;
+  text-transform: lowercase;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+[data-theme="atrium"] .greeting-word {
+  border-bottom: 1px solid color-mix(in oklab, var(--muted-foreground) 40%, transparent);
+  padding-bottom: 2px;
+  cursor: help;
+}
+[data-theme="atrium"] .greeting-name {
+  color: var(--muted-foreground);
+}
+
+/* Marginalia: drop-cap on first letter, italic body, rubber-stamp red cap */
+[data-theme="marginalia"] .greeting-widget {
+  font-family: var(--font-source-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--foreground);
+  text-align: left;
+  padding-top: 8px;
+}
+[data-theme="marginalia"] .greeting-word {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.08em;
+  cursor: help;
+}
+[data-theme="marginalia"] .greeting-dropcap {
+  font-family: var(--font-fraunces);
+  font-style: normal;
+  font-weight: 300;
+  font-size: 6rem;
+  line-height: 0.85;
+  color: var(--signal);
+  margin-right: 0.04em;
+  position: relative;
+  top: 0.15em;
+  text-transform: none;
+}
+[data-theme="marginalia"] .greeting-rest {
+  font-style: italic;
+  text-transform: lowercase;
+}
+[data-theme="marginalia"] .greeting-name {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+/* ─────────── Widget titles — per-theme ─────────── */
+[data-theme="quartz"] .widget-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+[data-theme="atrium"] .widget-title {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 300;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: lowercase;
+  color: var(--muted-foreground);
+}
+[data-theme="marginalia"] .widget-title {
+  font-family: var(--font-source-serif);
+  font-size: 13px;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: lowercase;
+  color: var(--muted-foreground);
+  text-align: right;
+}
+
+/* ─────────── Link lists — per-theme ─────────── */
+[data-theme="quartz"] ul a,
+[data-theme="atrium"] ul a,
+[data-theme="marginalia"] ul a {
+  border-radius: 0;
+}
+[data-theme="quartz"] ul a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  padding: 4px 0;
+  color: var(--foreground);
+}
+[data-theme="quartz"] ul a:hover {
+  background: transparent;
+  color: var(--signal);
+}
+[data-theme="atrium"] ul a {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: 3px 0;
+  color: var(--foreground);
+  text-transform: lowercase;
+}
+[data-theme="atrium"] ul a:hover {
+  background: transparent;
+  color: var(--signal);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+[data-theme="marginalia"] ul a {
+  font-family: var(--font-source-serif);
+  font-size: 14px;
+  padding: 2px 0;
+  color: var(--foreground);
+}
+[data-theme="marginalia"] ul a:hover {
+  background: transparent;
+  color: var(--accent-foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+/* ─────────── RSS items — per-theme ─────────── */
+[data-theme="quartz"] [data-slot="card-content"] ul li a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+[data-theme="atrium"] [data-slot="card-content"] ul li a {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  text-transform: lowercase;
+}
+[data-theme="marginalia"] [data-slot="card-content"] ul li a {
+  font-family: var(--font-source-serif);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ─────────── Notes & blockquotes — per-theme ─────────── */
+[data-theme="quartz"] [data-slot="card-content"] {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+[data-theme="atrium"] [data-slot="card-content"] {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+}
+[data-theme="marginalia"] [data-slot="card-content"] {
+  font-family: var(--font-source-serif);
+  font-size: 15px;
+  line-height: 1.6;
+}
+[data-theme="marginalia"] blockquote {
+  font-style: italic;
+  border-left: none;
+  padding-left: 0;
+  text-indent: 0;
+}
+[data-theme="marginalia"] blockquote:not(.readwise-quote)::before {
+  content: "“";
+  font-family: var(--font-fraunces);
+  font-size: 2.5em;
+  line-height: 0;
+  vertical-align: -0.3em;
+  margin-right: 0.05em;
+  color: var(--signal);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Readwise widget — per-theme treatments off a unified DOM
+   ════════════════════════════════════════════════════════════════════ */
+
+.readwise {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.readwise-quote {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+.readwise-dropcap {
+  /* default = inline, no drop-cap; marginalia overrides */
+  display: inline;
+}
+.readwise-skeleton {
+  height: 6rem;
+  background: var(--muted);
+  opacity: 0.6;
+  animation: pulse 2s infinite ease-in-out;
+}
+.readwise-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.readwise-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  padding: 0;
+}
+.readwise-action:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.readwise-progress-bar {
+  display: block;
+  position: relative;
+  height: 1px;
+  background: var(--border);
+  flex: 1;
+}
+.readwise-progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--signal);
+  transition: width 280ms ease;
+}
+.readwise-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.readwise-tags {
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─────────── QUARTZ — instrument register entry ─────────── */
+[data-theme="quartz"] .readwise {
+  font-family: var(--font-mono);
+  gap: 20px;
+}
+[data-theme="quartz"] .readwise-meta {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+[data-theme="quartz"] .readwise-progress-num {
+  color: var(--signal);
+}
+[data-theme="quartz"] .readwise-progress-bar {
+  height: 2px;
+  max-width: 120px;
+}
+[data-theme="quartz"] .readwise-progress-fill {
+  background: var(--signal);
+}
+[data-theme="quartz"] .readwise-tag::before {
+  content: "#";
+  opacity: 0.5;
+}
+[data-theme="quartz"] .readwise-quote {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--foreground);
+  padding-left: 12px;
+  border-left: 2px solid var(--signal);
+}
+[data-theme="quartz"] .readwise-source {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+[data-theme="quartz"] .readwise-source em {
+  font-style: normal;
+  color: var(--foreground);
+}
+[data-theme="quartz"] .readwise-action {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+[data-theme="quartz"] .readwise-action:hover:not(:disabled) {
+  color: var(--signal);
+}
+[data-theme="quartz"] .readwise-key {
+  display: inline-block;
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--foreground);
+}
+[data-theme="quartz"] .readwise-done-line {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+[data-theme="quartz"] .readwise-done-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* ─────────── ATRIUM — a breathing poem ─────────── */
+[data-theme="atrium"] .readwise {
+  gap: 28px;
+}
+[data-theme="atrium"] .readwise-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  color: var(--muted-foreground);
+  align-items: center;
+}
+[data-theme="atrium"] .readwise-progress-num {
+  font-style: italic;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--foreground);
+}
+[data-theme="atrium"] .readwise-progress-sep,
+[data-theme="atrium"] .readwise-progress-total {
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+[data-theme="atrium"] .readwise-progress-bar {
+  max-width: none;
+}
+[data-theme="atrium"] .readwise-tags {
+  font-style: italic;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: lowercase;
+  color: var(--muted-foreground);
+  opacity: 0.5;
+  transition: opacity 200ms ease;
+}
+[data-theme="atrium"] .readwise:hover .readwise-tags {
+  opacity: 1;
+}
+[data-theme="atrium"] .readwise-tag:not(:last-child)::after {
+  content: " ·";
+}
+[data-theme="atrium"] .readwise-quote {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.6rem;
+  line-height: 1.4;
+  color: var(--foreground);
+  /* no quotation marks, no border — let the words breathe */
+}
+[data-theme="atrium"] .readwise-source {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 350;
+  text-transform: lowercase;
+  color: var(--muted-foreground);
+  letter-spacing: 0.01em;
+}
+[data-theme="atrium"] .readwise-source::before {
+  content: "— ";
+}
+[data-theme="atrium"] .readwise-source em {
+  font-style: italic;
+  color: var(--foreground);
+}
+[data-theme="atrium"] .readwise-action {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: lowercase;
+  color: var(--muted-foreground);
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: color 180ms, border-color 180ms;
+}
+[data-theme="atrium"] .readwise-action:hover:not(:disabled) {
+  color: var(--signal);
+  border-bottom-color: var(--signal);
+}
+[data-theme="atrium"] .readwise-key {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted-foreground);
+}
+[data-theme="atrium"] .readwise-done-line {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.4rem;
+  text-transform: lowercase;
+  color: var(--foreground);
+}
+[data-theme="atrium"] .readwise-done-count {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  text-transform: lowercase;
+  color: var(--muted-foreground);
+}
+
+/* ─────────── MARGINALIA — passage with drop-cap ─────────── */
+[data-theme="marginalia"] .readwise {
+  gap: 18px;
+}
+[data-theme="marginalia"] .readwise-meta {
+  font-family: var(--font-source-serif);
+  font-size: 12px;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: lowercase;
+  color: var(--muted-foreground);
+  align-items: center;
+}
+[data-theme="marginalia"] .readwise-progress {
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "c2sc" 1, "smcp" 1;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+}
+[data-theme="marginalia"] .readwise-progress-num {
+  color: var(--signal);
+  font-weight: 600;
+}
+[data-theme="marginalia"] .readwise-progress-bar {
+  height: 1px;
+  background: var(--border);
+}
+[data-theme="marginalia"] .readwise-progress-fill {
+  background: var(--signal);
+}
+[data-theme="marginalia"] .readwise-tags {
+  font-style: italic;
+  color: var(--muted-foreground);
+}
+[data-theme="marginalia"] .readwise-tag:not(:last-child)::after {
+  content: " ·";
+}
+[data-theme="marginalia"] .readwise-quote {
+  font-family: var(--font-source-serif);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--foreground);
+  hyphens: auto;
+  text-align: justify;
+}
+[data-theme="marginalia"] .readwise-dropcap {
+  display: block;
+  float: left;
+  font-family: var(--font-fraunces);
+  font-weight: 300;
+  font-style: normal;
+  font-size: 4.5rem;
+  line-height: 0.85;
+  color: var(--signal);
+  padding-right: 8px;
+  padding-top: 4px;
+}
+[data-theme="marginalia"] .readwise-source {
+  font-family: var(--font-source-serif);
+  font-size: 12px;
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "c2sc" 1, "smcp" 1;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+  clear: both;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+[data-theme="marginalia"] .readwise-source em {
+  font-style: italic;
+  font-variant-caps: normal;
+  font-feature-settings: normal;
+  color: var(--foreground);
+}
+[data-theme="marginalia"] .readwise-action {
+  font-family: var(--font-source-serif);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--accent-foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklab, var(--accent-foreground) 50%, transparent);
+}
+[data-theme="marginalia"] .readwise-action:hover:not(:disabled) {
+  text-decoration-color: var(--accent-foreground);
+  color: var(--signal);
+}
+[data-theme="marginalia"] .readwise-key {
+  font-family: var(--font-source-serif);
+  font-style: normal;
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+[data-theme="marginalia"] .readwise-done-line {
+  font-family: var(--font-source-serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--foreground);
+}
+[data-theme="marginalia"] .readwise-done-count {
+  font-family: var(--font-source-serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+/* ─── Cover image (when showImage is on and image_url is present) ─── */
+.readwise-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.readwise-text-col {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.readwise-cover {
+  flex: 0 0 auto;
+  width: 56px;
+  height: auto;
+  display: block;
+  background: var(--muted);
+}
+
+/* Per-theme cover finish */
+[data-theme="quartz"] .readwise-cover {
+  width: 52px;
+  border: 1px solid var(--border);
+  filter: saturate(0.85);
+}
+[data-theme="atrium"] .readwise-cover {
+  width: 60px;
+  box-shadow: 0 4px 14px -8px rgba(0, 0, 0, 0.35);
+}
+[data-theme="marginalia"] .readwise-cover {
+  width: 64px;
+  border: 1px solid var(--border);
+  box-shadow:
+    1px 1px 0 0 var(--border),
+    2px 2px 6px -3px rgba(0, 0, 0, 0.25);
+  background: var(--card);
+}
+
+/* When there's a cover, the marginalia drop-cap would collide with the image
+   column. Disable the float so the body stays inside the text column. */
+[data-theme="marginalia"] .readwise[data-with-image] .readwise-dropcap {
+  display: inline;
+  float: none;
+  font-size: 1em;
+  line-height: inherit;
+  color: inherit;
+  padding: 0;
+}
+
+/* Empty state — themed inline via .readwise-empty */
+.readwise-empty {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+[data-theme="quartz"] .readwise-empty {
+  font-family: var(--font-mono);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+}
+
+/* ─────────── Search input — per-theme ─────────── */
+[data-theme="quartz"] input[type="text"] {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 12px 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  box-shadow: none;
+  caret-color: var(--signal);
+}
+[data-theme="quartz"] input[type="text"]:focus {
+  border-bottom-color: var(--signal);
+  --tw-ring-shadow: none;
+  outline: none;
+}
+[data-theme="quartz"] input[type="text"]::placeholder {
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 11px;
+}
+
+[data-theme="atrium"] input[type="text"] {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 10px 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  box-shadow: none;
+  text-transform: lowercase;
+}
+[data-theme="atrium"] input[type="text"]:focus {
+  border-bottom-color: var(--signal);
+  --tw-ring-shadow: none;
+  outline: none;
+}
+[data-theme="atrium"] input[type="text"]::placeholder {
+  color: var(--muted-foreground);
+  font-style: italic;
+  font-family: var(--font-heading);
+  text-transform: lowercase;
+}
+
+[data-theme="marginalia"] input[type="text"] {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 8px 0;
+  font-family: var(--font-source-serif);
+  font-size: 16px;
+  font-style: italic;
+  box-shadow: none;
+}
+[data-theme="marginalia"] input[type="text"]:focus {
+  border-bottom-color: var(--signal);
+  --tw-ring-shadow: none;
+  outline: none;
+}
+[data-theme="marginalia"] input[type="text"]::placeholder {
+  color: var(--muted-foreground);
+  font-style: italic;
 }

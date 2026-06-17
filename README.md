@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# nook
 
-## Getting Started
+Personal browser-homepage dashboard. Big central column for the things you use constantly (clock, search) plus a configurable number of side columns of widgets, all driven by a YAML file.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js 16 (App Router) + React 19
+- Tailwind CSS v4 + shadcn/ui
+- YAML config validated by Zod
+- Docker (standalone output) for Portainer
+
+## Configure
+
+Copy `config/dashboard.example.yaml` to `config/dashboard.yaml` and edit it.
+The real `dashboard.yaml` is gitignored — it holds API tokens — so each install keeps its own copy.
+
+Example shape:
+
+```yaml
+title: nook
+
+center:
+  - type: greeting
+    name: Jörn
+  - type: clock
+    format24h: true
+  - type: search
+    engine: duckduckgo
+
+columns:
+  - widgets:
+      - type: links
+        title: Dev
+        items:
+          - title: GitHub
+            url: https://github.com
+  - widgets:
+      - type: rss
+        title: HN Front Page
+        url: https://hnrss.org/frontpage
+        limit: 8
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Widget types
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| type       | options                                                          |
+| ---------- | ---------------------------------------------------------------- |
+| `greeting` | `name`                                                           |
+| `clock`    | `timezone`, `format24h`, `showDate`                              |
+| `search`   | `engine` (duckduckgo/google/kagi/brave/startpage), `placeholder` |
+| `links`    | `items[{title,url,icon?}]`, `columns` (1–4)                      |
+| `note`     | `body` (free text)                                               |
+| `rss`      | `url`, `limit`                                                   |
+| `readwise` | `token` (get at https://readwise.io/access_token)                |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+All widgets accept an optional `title`. The number of side columns is whatever you put under `columns:`.
 
-## Learn More
+The config path defaults to `./config/dashboard.yaml` and can be overridden with the `CONFIG_PATH` env var.
 
-To learn more about Next.js, take a look at the following resources:
+## Develop
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm install
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Build & run with Docker
 
-## Deploy on Vercel
+```bash
+docker build -t nook .
+docker run --rm -p 3000:3000 -v "$PWD/config:/config:ro" nook
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy to Portainer
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Push a built image (`docker build -t ghcr.io/<you>/nook:latest . && docker push …`) or build locally on the Portainer host.
+2. In Portainer → Stacks → Add stack, paste `docker-compose.yml` (or point it at this repo).
+3. Set env vars (`GHCR_OWNER`, `NOOK_PORT`, `TZ`) in the stack UI.
+4. Mount your `dashboard.yaml` at `/config/dashboard.yaml` — either via a Portainer-managed bind mount, a named volume, or by committing the config alongside the stack.
+5. Deploy. The container exposes port 3000 with a healthcheck on `/`.
+
+Changes to `dashboard.yaml` are picked up on the next request — no rebuild needed (the page is `force-dynamic`).

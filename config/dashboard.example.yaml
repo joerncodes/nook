@@ -1,0 +1,51 @@
+title: nook
+theme: atrium # quartz | atrium | marginalia
+
+center:
+  - type: greeting
+    name: You
+  - type: clock
+    format24h: true
+    showDate: true
+    showWeek: true # show ISO calendar week number
+    words: true # spell the time in english ("ten past seven.")
+  - type: search
+    engine: duckduckgo
+    placeholder: Search the web…
+  - type: readwise
+    title: Readwise daily review
+    showImage: true # show book/article cover, flexed to the left
+    # Get your token at https://readwise.io/access_token
+    token: REPLACE_WITH_YOUR_READWISE_TOKEN
+
+columns:
+  - widgets:
+      - type: links
+        title: Dev
+        columns: 1
+        items:
+          - title: GitHub
+            url: https://github.com
+          - title: Vercel
+            url: https://vercel.com
+          - title: Linear
+            url: https://linear.app
+      - type: note
+        title: Today
+        body: |
+          - Standup 10:00
+          - Review PRs
+          - Plan sprint
+  - widgets:
+      - type: links
+        title: Reading
+        columns: 1
+        items:
+          - title: Hacker News
+            url: https://news.ycombinator.com
+          - title: Lobste.rs
+            url: https://lobste.rs
+      - type: rss
+        title: HN Front Page
+        url: https://hnrss.org/frontpage
+        limit: 8
