@@ -1,5 +1,6 @@
 import { connection } from "next/server";
 import { fetchJellyfinSummary, type JellyfinSummary } from "@/lib/jellyfin";
+import { WidgetStat } from "./shared";
 
 type Props = {
   title?: string;
@@ -7,8 +8,6 @@ type Props = {
   apiKey: string;
   userId: string;
 };
-
-const numberFormatter = new Intl.NumberFormat("en-US");
 
 export async function JellyfinWidget({ title, baseUrl, apiKey, userId }: Props) {
   let summary: JellyfinSummary | null = null;
@@ -52,21 +51,6 @@ export async function JellyfinWidget({ title, baseUrl, apiKey, userId }: Props) 
         </div>
       )}
 
-      <dl className="jellyfin-counts">
-        <div className="jellyfin-stat">
-          <dt className="jellyfin-stat-label">Movies</dt>
-          <dd className="jellyfin-stat-value">
-            {numberFormatter.format(movieCount)}
-          </dd>
-        </div>
-        <div className="jellyfin-stat">
-          <dt className="jellyfin-stat-label">Episodes</dt>
-          <dd className="jellyfin-stat-value">
-            {numberFormatter.format(episodeCount)}
-          </dd>
-        </div>
-      </dl>
-
       {pick && pickHref && (
         <a
           className="jellyfin-latest"
@@ -92,6 +76,11 @@ export async function JellyfinWidget({ title, baseUrl, apiKey, userId }: Props) 
           </div>
         </a>
       )}
+
+      <dl className="widget-counts">
+        <WidgetStat label="Movies" value={movieCount} />
+        <WidgetStat label="Episodes" value={episodeCount} />
+      </dl>
     </div>
   );
 }

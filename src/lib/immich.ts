@@ -63,6 +63,30 @@ export async function fetchImmichAssets(opts: {
   return json.assets?.items ?? [];
 }
 
+export type ImmichStatistics = {
+  photos: number;
+  videos: number;
+  usage: number;
+};
+
+export async function fetchImmichStatistics(opts: {
+  baseUrl: string;
+  apiKey: string;
+}): Promise<ImmichStatistics> {
+  const url = `${opts.baseUrl.replace(/\/$/, "")}/api/server/statistics`;
+  const res = await fetch(url, {
+    headers: {
+      "x-api-key": opts.apiKey,
+      accept: "application/json",
+    },
+    next: { revalidate: 3600, tags: ["immich-statistics"] },
+  });
+  if (!res.ok) {
+    throw new Error(`Immich: ${res.status} ${res.statusText}`);
+  }
+  return (await res.json()) as ImmichStatistics;
+}
+
 export async function fetchImmichThumbnail(opts: {
   baseUrl: string;
   apiKey: string;

@@ -1,4 +1,5 @@
 import { TodoistApi, type Task } from "@doist/todoist-sdk";
+import { WidgetListItem } from "./shared";
 
 type Props = {
   token: string;
@@ -136,7 +137,7 @@ export async function TodoistWidget({
   }
 
   if (tasks.length === 0) {
-    return <p className="todoist-empty">Inbox zero.</p>;
+    return <p className="widget-empty">Inbox zero.</p>;
   }
 
   const filtered = hideSubtasks ? tasks.filter((t) => !t.parentId) : tasks;
@@ -145,42 +146,36 @@ export async function TodoistWidget({
     .slice(0, limit);
 
   return (
-    <ul className="todoist">
+    <ul className="todoist widget-list">
       {shown.map((t) => {
         const overdue = isOverdue(t);
         const due = formatDue(t);
         const project = projects.get(t.projectId);
         const projectName =
           project && !project.inboxProject ? project.name : null;
+        const meta =
+          projectName || due ? (
+            <>
+              {projectName && (
+                <span className="todoist-project">{projectName}</span>
+              )}
+              {projectName && due && (
+                <span className="todoist-meta-sep"> · </span>
+              )}
+              {due && <span className="todoist-due">{due}</span>}
+            </>
+          ) : undefined;
         return (
-          <li
+          <WidgetListItem
             key={t.id}
-            className="todoist-item"
-            data-overdue={overdue ? "true" : undefined}
-            data-priority={t.priority}
-          >
-            <a
-              href={t.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="todoist-link"
-            >
-              <span className="todoist-main">
-                <span className="todoist-content">{t.content}</span>
-                {(projectName || due) && (
-                  <span className="todoist-meta">
-                    {projectName && (
-                      <span className="todoist-project">{projectName}</span>
-                    )}
-                    {projectName && due && (
-                      <span className="todoist-meta-sep"> · </span>
-                    )}
-                    {due && <span className="todoist-due">{due}</span>}
-                  </span>
-                )}
-              </span>
-            </a>
-          </li>
+            href={t.url}
+            title={t.content}
+            meta={meta}
+            dataAttrs={{
+              "data-overdue": overdue ? "true" : undefined,
+              "data-priority": t.priority,
+            }}
+          />
         );
       })}
     </ul>

@@ -83,6 +83,13 @@ const jellyfinWidget = baseWidget.extend({
   userId: z.string().min(1),
 });
 
+const edgewiseWidget = baseWidget.extend({
+  type: z.literal("edgewise"),
+  baseUrl: z.string().url(),
+  token: z.string().min(1),
+  limit: z.number().int().min(1).max(20).optional().default(5),
+});
+
 export const widgetSchema = z.discriminatedUnion("type", [
   clockWidget,
   searchWidget,
@@ -94,6 +101,7 @@ export const widgetSchema = z.discriminatedUnion("type", [
   todoistWidget,
   immichWidget,
   jellyfinWidget,
+  edgewiseWidget,
 ]);
 
 export type Widget = z.infer<typeof widgetSchema>;

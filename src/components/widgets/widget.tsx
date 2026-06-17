@@ -10,6 +10,7 @@ import { ReadwiseWidget } from "./readwise";
 import { TodoistWidget } from "./todoist";
 import { ImmichWidget } from "./immich";
 import { JellyfinWidget } from "./jellyfin";
+import { EdgewiseWidget } from "./edgewise";
 
 function renderBody(w: Widget) {
   switch (w.type) {
@@ -61,6 +62,14 @@ function renderBody(w: Widget) {
           baseUrl={w.baseUrl}
           apiKey={w.apiKey}
           userId={w.userId}
+        />
+      );
+    case "edgewise":
+      return (
+        <EdgewiseWidget
+          baseUrl={w.baseUrl}
+          token={w.token}
+          limit={w.limit}
         />
       );
   }

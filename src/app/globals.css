@@ -991,40 +991,79 @@
 }
 
 /* ════════════════════════════════════════════════════════════════════
-   Todoist widget — per-theme treatments
+   Shared widget primitives — stat blip (dl/dt/dd) and list rows.
+   Used by Jellyfin, Todoist, and Edgewise. Theme overrides scope
+   through each widget's parent class (.jellyfin / .todoist / .edgewise).
    ════════════════════════════════════════════════════════════════════ */
 
-.todoist {
+.widget-counts {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.widget-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1 1 0;
+}
+.widget-stat-label {
+  color: var(--muted-foreground);
+}
+.widget-stat-value {
+  margin: 0;
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+[data-theme="quartz"] .widget-stat-value {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  letter-spacing: 0.02em;
+}
+
+.widget-list {
   display: flex;
   flex-direction: column;
   list-style: none;
   padding: 0;
   margin: 0;
 }
-.todoist-item {
+.widget-list-item {
   list-style: none;
 }
-.todoist-link {
-  display: block;
+.widget-list-link {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
   text-decoration: none;
   color: inherit;
   min-width: 0;
   border-radius: calc(var(--radius) * 0.6);
   transition: background-color 140ms ease, color 140ms ease;
 }
-.todoist-main {
+.widget-list-leading {
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+}
+.widget-list-main {
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  flex: 1 1 auto;
 }
-.todoist-content {
+.widget-list-content {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.todoist-meta {
+.widget-list-meta {
   display: block;
   color: var(--muted-foreground);
   font-size: 0.78em;
@@ -1034,59 +1073,57 @@
   white-space: nowrap;
   transition: opacity 140ms ease;
 }
-.todoist-link:hover .todoist-meta,
-.todoist-link:focus-visible .todoist-meta {
+.widget-list-link:hover .widget-list-meta,
+.widget-list-link:focus-visible .widget-list-meta {
   opacity: 1;
 }
-.todoist-project,
-.todoist-due,
-.todoist-meta-sep {
-  font-size: inherit;
-}
-.todoist-item[data-overdue="true"] .todoist-due {
-  color: var(--signal);
-  opacity: 1;
-}
-.todoist-empty {
+.widget-empty {
   color: var(--muted-foreground);
   font-style: italic;
   margin: 0;
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   Todoist widget — per-theme treatments
+   ════════════════════════════════════════════════════════════════════ */
+
+.todoist-project,
+.todoist-due,
+.todoist-meta-sep {
+  font-size: inherit;
+}
+.todoist .widget-list-item[data-overdue="true"] .todoist-due {
+  color: var(--signal);
+  opacity: 1;
+}
+
 /* ─── Quartz — register row, mono, hairline under each ─── */
-[data-theme="quartz"] .todoist-item + .todoist-item .todoist-link {
+[data-theme="quartz"] .todoist .widget-list-item + .widget-list-item .widget-list-link {
   border-top: 1px solid var(--border);
 }
-[data-theme="quartz"] .todoist-link {
+[data-theme="quartz"] .todoist .widget-list-link {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.02em;
   padding: 8px 0;
   border-radius: 0;
 }
-[data-theme="quartz"] .todoist-link:hover {
+[data-theme="quartz"] .todoist .widget-list-link:hover {
   color: var(--signal);
 }
-[data-theme="quartz"] .todoist-meta {
+[data-theme="quartz"] .todoist .widget-list-meta {
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   opacity: 0.5;
 }
-[data-theme="quartz"] .todoist-item[data-overdue="true"] .todoist-content::before {
+[data-theme="quartz"] .todoist .widget-list-item[data-overdue="true"] .widget-list-content::before {
   content: "▍ ";
   color: var(--signal);
 }
-[data-theme="quartz"] .todoist-empty {
-  font-family: var(--font-mono);
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 11px;
-}
 
 /* ─── Atrium — soft hover bg, lowercase, italic meta ─── */
-[data-theme="atrium"] .todoist-link {
+[data-theme="atrium"] .todoist .widget-list-link {
   font-family: var(--font-sans);
   font-size: 14px;
   text-transform: lowercase;
@@ -1094,10 +1131,10 @@
   margin: 0 -10px;
   border-radius: 6px;
 }
-[data-theme="atrium"] .todoist-link:hover {
+[data-theme="atrium"] .todoist .widget-list-link:hover {
   background: var(--muted);
 }
-[data-theme="atrium"] .todoist-meta {
+[data-theme="atrium"] .todoist .widget-list-meta {
   font-family: var(--font-heading);
   font-style: italic;
   text-transform: lowercase;
@@ -1105,29 +1142,24 @@
   letter-spacing: 0;
   opacity: 0.5;
 }
-[data-theme="atrium"] .todoist-item[data-overdue="true"] .todoist-content {
+[data-theme="atrium"] .todoist .widget-list-item[data-overdue="true"] .widget-list-content {
   font-weight: 500;
-}
-[data-theme="atrium"] .todoist-empty {
-  font-family: var(--font-heading);
-  font-style: italic;
-  text-transform: lowercase;
 }
 
 /* ─── Marginalia — gold-thread separator, serif, small-caps meta ─── */
-[data-theme="marginalia"] .todoist-item + .todoist-item .todoist-link {
+[data-theme="marginalia"] .todoist .widget-list-item + .widget-list-item .widget-list-link {
   border-top: 1px solid var(--border);
 }
-[data-theme="marginalia"] .todoist-link {
+[data-theme="marginalia"] .todoist .widget-list-link {
   font-family: var(--font-source-serif);
   font-size: 14px;
   padding: 8px 0;
   border-radius: 0;
 }
-[data-theme="marginalia"] .todoist-link:hover {
+[data-theme="marginalia"] .todoist .widget-list-link:hover {
   color: var(--accent-foreground);
 }
-[data-theme="marginalia"] .todoist-meta {
+[data-theme="marginalia"] .todoist .widget-list-meta {
   font-variant-caps: all-small-caps;
   font-feature-settings: "c2sc" 1, "smcp" 1;
   letter-spacing: 0.04em;
@@ -1135,24 +1167,27 @@
   font-style: normal;
   opacity: 0.5;
 }
-[data-theme="marginalia"] .todoist-due {
+[data-theme="marginalia"] .todoist .todoist-due {
   font-style: italic;
   font-variant-caps: normal;
   font-feature-settings: normal;
   font-size: 12px;
   letter-spacing: 0;
 }
-[data-theme="marginalia"] .todoist-item[data-overdue="true"] .todoist-content::before {
+[data-theme="marginalia"] .todoist .widget-list-item[data-overdue="true"] .widget-list-content::before {
   content: "† ";
   color: var(--signal);
-}
-[data-theme="marginalia"] .todoist-empty {
-  font-style: italic;
 }
 
 /* ════════════════════════════════════════════════════════════════════
    Immich widget — single photo or auto-rotating crossfade carousel
    ════════════════════════════════════════════════════════════════════ */
+
+.immich {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 
 /* Frame's aspect ratio is set per-image inline (from Immich width/height),
    so portrait images get portrait frames and landscape ones get landscape.
@@ -1255,6 +1290,14 @@
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 11px;
+}
+[data-theme="quartz"] .immich {
+  font-family: var(--font-mono);
+}
+[data-theme="quartz"] .immich .widget-stat-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 /* ─── Atrium — soft elevation, italic lowercase position ─── */
@@ -1398,26 +1441,6 @@
 .jellyfin-title-link:hover {
   color: var(--signal);
 }
-.jellyfin-counts {
-  display: flex;
-  gap: 32px;
-  margin: 0;
-  padding: 0;
-}
-.jellyfin-stat {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-.jellyfin-stat-label {
-  color: var(--muted-foreground);
-}
-.jellyfin-stat-value {
-  margin: 0;
-  color: var(--foreground);
-  font-variant-numeric: tabular-nums;
-}
 .jellyfin-latest {
   display: flex;
   align-items: flex-start;
@@ -1455,19 +1478,13 @@
 [data-theme="quartz"] .jellyfin {
   font-family: var(--font-mono);
 }
-[data-theme="quartz"] .jellyfin-counts {
+[data-theme="quartz"] .jellyfin .widget-counts {
   gap: 28px;
 }
-[data-theme="quartz"] .jellyfin-stat-label {
+[data-theme="quartz"] .jellyfin .widget-stat-label {
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-}
-[data-theme="quartz"] .jellyfin-stat-value {
-  font-family: var(--font-mono);
-  font-size: 22px;
-  letter-spacing: 0.02em;
-  color: var(--foreground);
 }
 [data-theme="quartz"] .jellyfin-poster {
   width: 64px;
@@ -1505,17 +1522,17 @@
   box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.4);
   border-radius: 4px;
 }
-[data-theme="atrium"] .jellyfin-counts {
+[data-theme="atrium"] .jellyfin .widget-counts {
   gap: 36px;
   order: 1;
 }
-[data-theme="atrium"] .jellyfin-stat-label {
+[data-theme="atrium"] .jellyfin .widget-stat-label {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: lowercase;
 }
-[data-theme="atrium"] .jellyfin-stat-value {
+[data-theme="atrium"] .jellyfin .widget-stat-value {
   font-family: var(--font-heading);
   font-style: italic;
   font-weight: 300;
@@ -1555,19 +1572,19 @@
     1px 1px 0 0 var(--border),
     2px 2px 6px -3px rgba(0, 0, 0, 0.25);
 }
-[data-theme="marginalia"] .jellyfin-counts {
+[data-theme="marginalia"] .jellyfin .widget-counts {
   gap: 32px;
   padding-top: 4px;
   border-top: 1px solid var(--border);
 }
-[data-theme="marginalia"] .jellyfin-stat-label {
+[data-theme="marginalia"] .jellyfin .widget-stat-label {
   font-family: var(--font-source-serif);
   font-variant-caps: all-small-caps;
   font-feature-settings: "c2sc" 1, "smcp" 1;
   letter-spacing: 0.04em;
   font-size: 12px;
 }
-[data-theme="marginalia"] .jellyfin-stat-value {
+[data-theme="marginalia"] .jellyfin .widget-stat-value {
   font-family: var(--font-source-serif);
   font-size: 1.5rem;
   line-height: 1;
@@ -1587,4 +1604,119 @@
 }
 [data-theme="marginalia"] .jellyfin-latest:hover .jellyfin-caption-title {
   color: var(--accent-foreground);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Edgewise widget — knife-sharpening backlog (hero + list)
+   ════════════════════════════════════════════════════════════════════ */
+
+.edgewise {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.edgewise-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+.edgewise-hero-image,
+.edgewise-hero-fallback {
+  flex: 0 0 auto;
+  width: 88px;
+  height: 88px;
+  background: var(--muted);
+}
+.edgewise-hero-image {
+  display: block;
+  object-fit: cover;
+}
+.edgewise-hero-fallback {
+  display: grid;
+  place-items: center;
+  color: var(--muted-foreground);
+  font-size: 28px;
+}
+.edgewise-hero-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.edgewise-position {
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.edgewise-hero-name {
+  color: var(--foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.edgewise-hero-owner {
+  color: var(--muted-foreground);
+}
+
+/* ─── Quartz — eyebrow labels, tabular mono, hairline rows ─── */
+[data-theme="quartz"] .edgewise {
+  font-family: var(--font-mono);
+}
+[data-theme="quartz"] .edgewise .widget-counts {
+  gap: 28px;
+}
+[data-theme="quartz"] .edgewise .widget-stat-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+[data-theme="quartz"] .edgewise-hero-image,
+[data-theme="quartz"] .edgewise-hero-fallback {
+  border: 1px solid var(--border);
+  filter: saturate(0.85);
+}
+[data-theme="quartz"] .edgewise-hero:hover .edgewise-hero-image {
+  filter: saturate(1);
+}
+[data-theme="quartz"] .edgewise-position,
+[data-theme="quartz"] .edgewise-hero-owner {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+[data-theme="quartz"] .edgewise-hero-name {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+[data-theme="quartz"] .edgewise-hero:hover .edgewise-hero-name {
+  color: var(--signal);
+}
+[data-theme="quartz"] .edgewise .widget-list-item + .widget-list-item .widget-list-link {
+  border-top: 1px solid var(--border);
+}
+[data-theme="quartz"] .edgewise .widget-list-link {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  padding: 8px 0;
+  border-radius: 0;
+}
+[data-theme="quartz"] .edgewise .widget-list-link:hover {
+  color: var(--signal);
+}
+[data-theme="quartz"] .edgewise .widget-list-leading {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+[data-theme="quartz"] .edgewise .widget-list-meta {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.5;
 }
