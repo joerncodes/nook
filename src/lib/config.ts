@@ -67,6 +67,22 @@ const todoistWidget = baseWidget.extend({
   hideSubtasks: z.boolean().optional().default(false),
 });
 
+const immichWidget = baseWidget.extend({
+  type: z.literal("immich"),
+  baseUrl: z.string().url(),
+  apiKey: z.string().min(1),
+  favorites: z.boolean().optional().default(false),
+  albumId: z.string().optional(),
+  limit: z.number().int().min(1).max(20).optional().default(6),
+});
+
+const jellyfinWidget = baseWidget.extend({
+  type: z.literal("jellyfin"),
+  baseUrl: z.string().url(),
+  apiKey: z.string().min(1),
+  userId: z.string().min(1),
+});
+
 export const widgetSchema = z.discriminatedUnion("type", [
   clockWidget,
   searchWidget,
@@ -76,6 +92,8 @@ export const widgetSchema = z.discriminatedUnion("type", [
   greetingWidget,
   readwiseWidget,
   todoistWidget,
+  immichWidget,
+  jellyfinWidget,
 ]);
 
 export type Widget = z.infer<typeof widgetSchema>;

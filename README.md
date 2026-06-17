@@ -53,6 +53,7 @@ columns:
 | `rss`      | `url`, `limit`                                                   |
 | `readwise` | `token` (get at https://readwise.io/access_token), `showImage`   |
 | `todoist`  | `token`, `filter` (Todoist filter syntax), `limit`               |
+| `immich`   | `baseUrl`, `apiKey`, `favorites` or `albumId`, `limit`           |
 
 All widgets accept an optional `title`. The number of side columns is whatever you put under `columns:`.
 

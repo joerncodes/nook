@@ -79,9 +79,15 @@ export default async function Home() {
         <main
           className={`flex min-w-0 flex-col items-center justify-center ${themeGap}`}
         >
-          <div className="flex w-full max-w-2xl flex-col items-stretch gap-8">
+          <div className="flex w-full flex-col items-stretch gap-8">
             {config.center.map((w, i) => (
-              <WidgetRenderer key={`center-${i}`} widget={w} />
+              <div
+                key={`center-${i}`}
+                className="center-widget mx-auto w-full"
+                data-widget={w.type}
+              >
+                <WidgetRenderer widget={w} />
+              </div>
             ))}
           </div>
         </main>

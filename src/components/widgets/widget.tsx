@@ -8,6 +8,8 @@ import { RssWidget } from "./rss";
 import { GreetingWidget } from "./greeting";
 import { ReadwiseWidget } from "./readwise";
 import { TodoistWidget } from "./todoist";
+import { ImmichWidget } from "./immich";
+import { JellyfinWidget } from "./jellyfin";
 
 function renderBody(w: Widget) {
   switch (w.type) {
@@ -42,10 +44,30 @@ function renderBody(w: Widget) {
           hideSubtasks={w.hideSubtasks}
         />
       );
+    case "immich":
+      return (
+        <ImmichWidget
+          baseUrl={w.baseUrl}
+          apiKey={w.apiKey}
+          favorites={w.favorites}
+          albumId={w.albumId}
+          limit={w.limit}
+        />
+      );
+    case "jellyfin":
+      return (
+        <JellyfinWidget
+          title={w.title}
+          baseUrl={w.baseUrl}
+          apiKey={w.apiKey}
+          userId={w.userId}
+        />
+      );
   }
 }
 
 const NAKED = new Set(["clock", "search", "greeting"]);
+const SELF_TITLED = new Set(["jellyfin"]);
 
 export function WidgetRenderer({ widget }: { widget: Widget }) {
   const body = renderBody(widget);
@@ -56,7 +78,7 @@ export function WidgetRenderer({ widget }: { widget: Widget }) {
 
   return (
     <Card className="w-full">
-      {widget.title && (
+      {widget.title && !SELF_TITLED.has(widget.type) && (
         <CardHeader>
           <CardTitle className="widget-title">{widget.title}</CardTitle>
         </CardHeader>

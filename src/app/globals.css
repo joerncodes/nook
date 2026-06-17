@@ -347,6 +347,16 @@
   }
 }
 
+/* Center-column widget caps — reading widgets stay narrow, photo widget
+   fills the available middle track (modulo a sane upper limit so it
+   doesn't dominate at ultra-wide widths). */
+.center-widget {
+  max-width: 42rem;
+}
+.center-widget[data-widget="immich"] {
+  max-width: min(72rem, 100%);
+}
+
 /* ════════════════════════════════════════════════════════════════════
    Theme-shared signature pieces
    ════════════════════════════════════════════════════════════════════ */
@@ -1140,6 +1150,151 @@
   font-style: italic;
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   Immich widget — single photo or auto-rotating crossfade carousel
+   ════════════════════════════════════════════════════════════════════ */
+
+/* Frame's aspect ratio is set per-image inline (from Immich width/height),
+   so portrait images get portrait frames and landscape ones get landscape.
+   max-height prevents an extreme portrait from eating the screen. */
+.immich-single,
+.immich-carousel-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-height: 70vh;
+  background: var(--muted);
+  overflow: hidden;
+  transition: aspect-ratio 600ms ease;
+}
+.immich-thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 180ms ease, filter 180ms ease;
+}
+.immich-single:hover .immich-thumb {
+  opacity: 0.92;
+}
+.immich-empty {
+  color: var(--muted-foreground);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Carousel — images stacked absolutely in the frame, crossfade via opacity. */
+.immich-carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.immich-carousel-img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1200ms ease;
+}
+.immich-carousel-img[data-active="true"] {
+  opacity: 1;
+}
+.immich-carousel-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted-foreground);
+  opacity: 0.5;
+  transition: opacity 140ms ease;
+  font-size: 0.78em;
+}
+.immich-carousel:hover .immich-carousel-meta {
+  opacity: 1;
+}
+.immich-carousel-next {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  padding: 0 4px;
+}
+.immich-carousel-next:hover {
+  color: var(--signal);
+}
+.immich-carousel[data-paused="true"] .immich-carousel-pos::after {
+  content: " · paused";
+  opacity: 0.7;
+}
+
+/* ─── Quartz — hairlines, mono position, slight desaturation ─── */
+[data-theme="quartz"] .immich-single,
+[data-theme="quartz"] .immich-carousel-frame {
+  border: 1px solid var(--border);
+}
+[data-theme="quartz"] .immich-thumb,
+[data-theme="quartz"] .immich-carousel-img {
+  filter: saturate(0.85);
+}
+[data-theme="quartz"] .immich-single:hover .immich-thumb {
+  filter: saturate(1);
+}
+[data-theme="quartz"] .immich-carousel-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+[data-theme="quartz"] .immich-empty {
+  font-family: var(--font-mono);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+}
+
+/* ─── Atrium — soft elevation, italic lowercase position ─── */
+[data-theme="atrium"] .immich-single,
+[data-theme="atrium"] .immich-carousel-frame {
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+}
+[data-theme="atrium"] .immich-carousel-meta {
+  font-family: var(--font-heading);
+  font-style: italic;
+  text-transform: lowercase;
+  font-size: 12px;
+}
+[data-theme="atrium"] .immich-empty {
+  font-family: var(--font-heading);
+  font-style: italic;
+  text-transform: lowercase;
+}
+
+/* ─── Marginalia — book-plate, small-caps position ─── */
+[data-theme="marginalia"] .immich-single,
+[data-theme="marginalia"] .immich-carousel-frame {
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow:
+    1px 1px 0 0 var(--border),
+    2px 2px 6px -3px rgba(0, 0, 0, 0.25);
+}
+[data-theme="marginalia"] .immich-carousel-meta {
+  font-family: var(--font-source-serif);
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "c2sc" 1, "smcp" 1;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+}
+[data-theme="marginalia"] .immich-empty {
+  font-style: italic;
+}
+
 /* Empty state — themed inline via .readwise-empty */
 .readwise-empty {
   color: var(--muted-foreground);
@@ -1220,4 +1375,216 @@
 [data-theme="marginalia"] input[type="text"]::placeholder {
   color: var(--muted-foreground);
   font-style: italic;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   Jellyfin widget — two counts + latest movie poster
+   ════════════════════════════════════════════════════════════════════ */
+
+.jellyfin {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.jellyfin-header {
+  padding-bottom: 4px;
+}
+.jellyfin-title-link {
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+  transition: color 140ms ease;
+}
+.jellyfin-title-link:hover {
+  color: var(--signal);
+}
+.jellyfin-counts {
+  display: flex;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+}
+.jellyfin-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.jellyfin-stat-label {
+  color: var(--muted-foreground);
+}
+.jellyfin-stat-value {
+  margin: 0;
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.jellyfin-latest {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+.jellyfin-poster {
+  flex: 0 0 auto;
+  width: 72px;
+  height: auto;
+  display: block;
+  background: var(--muted);
+}
+.jellyfin-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.jellyfin-caption-title {
+  color: var(--foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.jellyfin-caption-year {
+  color: var(--muted-foreground);
+}
+
+/* ─── Quartz — counts on top, tabular mono, eyebrow labels ─── */
+[data-theme="quartz"] .jellyfin {
+  font-family: var(--font-mono);
+}
+[data-theme="quartz"] .jellyfin-counts {
+  gap: 28px;
+}
+[data-theme="quartz"] .jellyfin-stat-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+[data-theme="quartz"] .jellyfin-stat-value {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  color: var(--foreground);
+}
+[data-theme="quartz"] .jellyfin-poster {
+  width: 64px;
+  border: 1px solid var(--border);
+  filter: saturate(0.85);
+}
+[data-theme="quartz"] .jellyfin-latest:hover .jellyfin-poster {
+  filter: saturate(1);
+}
+[data-theme="quartz"] .jellyfin-caption-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+[data-theme="quartz"] .jellyfin-caption-year {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+[data-theme="quartz"] .jellyfin-latest:hover .jellyfin-caption-title {
+  color: var(--signal);
+}
+
+/* ─── Atrium — poster as focal point, italic Fraunces numbers ─── */
+[data-theme="atrium"] .jellyfin {
+  gap: 22px;
+}
+[data-theme="atrium"] .jellyfin-latest {
+  flex-direction: column;
+  gap: 10px;
+}
+[data-theme="atrium"] .jellyfin-poster {
+  width: 100%;
+  max-width: 220px;
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+}
+[data-theme="atrium"] .jellyfin-counts {
+  gap: 36px;
+  order: 1;
+}
+[data-theme="atrium"] .jellyfin-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+}
+[data-theme="atrium"] .jellyfin-stat-value {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 2rem;
+  line-height: 1;
+}
+[data-theme="atrium"] .jellyfin-caption-title {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 1.1rem;
+  text-transform: lowercase;
+}
+[data-theme="atrium"] .jellyfin-caption-year {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  text-transform: lowercase;
+}
+[data-theme="atrium"] .jellyfin-latest:hover .jellyfin-caption-title {
+  color: var(--signal);
+}
+
+/* ─── Marginalia — book-plate frame, small-caps labels, hairline ─── */
+[data-theme="marginalia"] .jellyfin {
+  gap: 16px;
+}
+[data-theme="marginalia"] .jellyfin-latest {
+  flex-direction: column;
+  gap: 10px;
+}
+[data-theme="marginalia"] .jellyfin-poster {
+  width: 100%;
+  max-width: 200px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow:
+    1px 1px 0 0 var(--border),
+    2px 2px 6px -3px rgba(0, 0, 0, 0.25);
+}
+[data-theme="marginalia"] .jellyfin-counts {
+  gap: 32px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+[data-theme="marginalia"] .jellyfin-stat-label {
+  font-family: var(--font-source-serif);
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "c2sc" 1, "smcp" 1;
+  letter-spacing: 0.04em;
+  font-size: 12px;
+}
+[data-theme="marginalia"] .jellyfin-stat-value {
+  font-family: var(--font-source-serif);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--foreground);
+}
+[data-theme="marginalia"] .jellyfin-caption-title {
+  font-family: var(--font-source-serif);
+  font-style: italic;
+  font-size: 15px;
+}
+[data-theme="marginalia"] .jellyfin-caption-year {
+  font-family: var(--font-source-serif);
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "c2sc" 1, "smcp" 1;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+}
+[data-theme="marginalia"] .jellyfin-latest:hover .jellyfin-caption-title {
+  color: var(--accent-foreground);
 }

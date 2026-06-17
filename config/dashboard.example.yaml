@@ -57,3 +57,18 @@ columns:
         hideSubtasks: true # only show top-level tasks
         # https://app.todoist.com/app/settings/integrations/developer
         token: REPLACE_WITH_YOUR_TODOIST_TOKEN
+      - type: immich
+        title: Photos
+        baseUrl: https://immich.your.domain
+        # User settings → API Keys
+        apiKey: REPLACE_WITH_YOUR_IMMICH_API_KEY
+        favorites: true # OR: albumId: <album-id>
+        limit: 6
+      - type: jellyfin
+        title: Library
+        baseUrl: https://jellyfin.your.domain
+        # Dashboard → API Keys
+        apiKey: REPLACE_WITH_YOUR_JELLYFIN_API_KEY
+        # Dashboard → Users → pick a user → URL contains the userId,
+        # or GET /Users with the API key
+        userId: REPLACE_WITH_YOUR_JELLYFIN_USER_ID
