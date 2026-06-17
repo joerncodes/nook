@@ -7,6 +7,7 @@ import { NoteWidget } from "./note";
 import { RssWidget } from "./rss";
 import { GreetingWidget } from "./greeting";
 import { ReadwiseWidget } from "./readwise";
+import { TodoistWidget } from "./todoist";
 
 function renderBody(w: Widget) {
   switch (w.type) {
@@ -32,6 +33,15 @@ function renderBody(w: Widget) {
       return <GreetingWidget name={w.name} />;
     case "readwise":
       return <ReadwiseWidget token={w.token} showImage={w.showImage} />;
+    case "todoist":
+      return (
+        <TodoistWidget
+          token={w.token}
+          filter={w.filter}
+          limit={w.limit}
+          hideSubtasks={w.hideSubtasks}
+        />
+      );
   }
 }
 

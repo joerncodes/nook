@@ -49,3 +49,11 @@ columns:
         title: HN Front Page
         url: https://hnrss.org/frontpage
         limit: 8
+      - type: todoist
+        title: Todoist — today
+        # https://todoist.com/help/articles/206137851 — filter syntax
+        filter: today | overdue
+        limit: 12
+        hideSubtasks: true # only show top-level tasks
+        # https://app.todoist.com/app/settings/integrations/developer
+        token: REPLACE_WITH_YOUR_TODOIST_TOKEN

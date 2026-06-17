@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 ---
 
 # Todoist reading widget

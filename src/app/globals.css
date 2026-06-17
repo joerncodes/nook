@@ -980,6 +980,166 @@
   padding: 0;
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   Todoist widget — per-theme treatments
+   ════════════════════════════════════════════════════════════════════ */
+
+.todoist {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.todoist-item {
+  list-style: none;
+}
+.todoist-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+  border-radius: calc(var(--radius) * 0.6);
+  transition: background-color 140ms ease, color 140ms ease;
+}
+.todoist-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.todoist-content {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.todoist-meta {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: 0.78em;
+  opacity: 0.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: opacity 140ms ease;
+}
+.todoist-link:hover .todoist-meta,
+.todoist-link:focus-visible .todoist-meta {
+  opacity: 1;
+}
+.todoist-project,
+.todoist-due,
+.todoist-meta-sep {
+  font-size: inherit;
+}
+.todoist-item[data-overdue="true"] .todoist-due {
+  color: var(--signal);
+  opacity: 1;
+}
+.todoist-empty {
+  color: var(--muted-foreground);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ─── Quartz — register row, mono, hairline under each ─── */
+[data-theme="quartz"] .todoist-item + .todoist-item .todoist-link {
+  border-top: 1px solid var(--border);
+}
+[data-theme="quartz"] .todoist-link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  padding: 8px 0;
+  border-radius: 0;
+}
+[data-theme="quartz"] .todoist-link:hover {
+  color: var(--signal);
+}
+[data-theme="quartz"] .todoist-meta {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+[data-theme="quartz"] .todoist-item[data-overdue="true"] .todoist-content::before {
+  content: "▍ ";
+  color: var(--signal);
+}
+[data-theme="quartz"] .todoist-empty {
+  font-family: var(--font-mono);
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+}
+
+/* ─── Atrium — soft hover bg, lowercase, italic meta ─── */
+[data-theme="atrium"] .todoist-link {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  text-transform: lowercase;
+  padding: 6px 10px;
+  margin: 0 -10px;
+  border-radius: 6px;
+}
+[data-theme="atrium"] .todoist-link:hover {
+  background: var(--muted);
+}
+[data-theme="atrium"] .todoist-meta {
+  font-family: var(--font-heading);
+  font-style: italic;
+  text-transform: lowercase;
+  font-size: 12px;
+  letter-spacing: 0;
+  opacity: 0.5;
+}
+[data-theme="atrium"] .todoist-item[data-overdue="true"] .todoist-content {
+  font-weight: 500;
+}
+[data-theme="atrium"] .todoist-empty {
+  font-family: var(--font-heading);
+  font-style: italic;
+  text-transform: lowercase;
+}
+
+/* ─── Marginalia — gold-thread separator, serif, small-caps meta ─── */
+[data-theme="marginalia"] .todoist-item + .todoist-item .todoist-link {
+  border-top: 1px solid var(--border);
+}
+[data-theme="marginalia"] .todoist-link {
+  font-family: var(--font-source-serif);
+  font-size: 14px;
+  padding: 8px 0;
+  border-radius: 0;
+}
+[data-theme="marginalia"] .todoist-link:hover {
+  color: var(--accent-foreground);
+}
+[data-theme="marginalia"] .todoist-meta {
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "c2sc" 1, "smcp" 1;
+  letter-spacing: 0.04em;
+  font-size: 11px;
+  font-style: normal;
+  opacity: 0.5;
+}
+[data-theme="marginalia"] .todoist-due {
+  font-style: italic;
+  font-variant-caps: normal;
+  font-feature-settings: normal;
+  font-size: 12px;
+  letter-spacing: 0;
+}
+[data-theme="marginalia"] .todoist-item[data-overdue="true"] .todoist-content::before {
+  content: "† ";
+  color: var(--signal);
+}
+[data-theme="marginalia"] .todoist-empty {
+  font-style: italic;
+}
+
 /* Empty state — themed inline via .readwise-empty */
 .readwise-empty {
   color: var(--muted-foreground);

@@ -46,12 +46,13 @@ columns:
 | type       | options                                                          |
 | ---------- | ---------------------------------------------------------------- |
 | `greeting` | `name`                                                           |
-| `clock`    | `timezone`, `format24h`, `showDate`                              |
+| `clock`    | `timezone`, `format24h`, `showDate`, `showWeek`, `words`         |
 | `search`   | `engine` (duckduckgo/google/kagi/brave/startpage), `placeholder` |
 | `links`    | `items[{title,url,icon?}]`, `columns` (1–4)                      |
 | `note`     | `body` (free text)                                               |
 | `rss`      | `url`, `limit`                                                   |
-| `readwise` | `token` (get at https://readwise.io/access_token)                |
+| `readwise` | `token` (get at https://readwise.io/access_token), `showImage`   |
+| `todoist`  | `token`, `filter` (Todoist filter syntax), `limit`               |
 
 All widgets accept an optional `title`. The number of side columns is whatever you put under `columns:`.
 
