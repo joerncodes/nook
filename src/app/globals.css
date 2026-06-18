@@ -371,66 +371,40 @@
   transform-origin: center;
 }
 
-/* ─────────── Light/dark toggle — fixed corner, per-theme voice ─────────── */
+/* ─────────── Light/dark toggle — fixed-corner sun/moon icon ─────────── */
 .theme-toggle {
   position: fixed;
-  top: 16px;
+  top: 18px;
   right: 20px;
   z-index: 50;
   display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  padding: 4px 6px;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   background: transparent;
   border: none;
   cursor: pointer;
-  font: inherit;
-  font-size: 12px;
-  line-height: 1;
   color: var(--muted-foreground);
-  opacity: 0.5;
-  transition: opacity 160ms ease;
+  opacity: 0.55;
+  transition: opacity 160ms ease, color 160ms ease;
 }
 .theme-toggle:hover,
 .theme-toggle:focus-visible {
   opacity: 1;
+  color: var(--foreground);
   outline: none;
 }
-.theme-toggle-opt {
-  transition: color 160ms ease;
-}
-.theme-toggle-opt[data-active] {
-  color: var(--foreground);
-}
-.theme-toggle-sep {
-  opacity: 0.5;
+.theme-toggle-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
-[data-theme="quartz"] .theme-toggle {
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 10px;
-}
-[data-theme="quartz"] .theme-toggle-opt[data-active] {
+[data-theme="quartz"] .theme-toggle:hover,
+[data-theme="quartz"] .theme-toggle:focus-visible {
   color: var(--signal);
-}
-
-[data-theme="atrium"] .theme-toggle {
-  font-family: var(--font-heading);
-  font-style: italic;
-  text-transform: lowercase;
-  font-size: 13px;
-}
-
-[data-theme="marginalia"] .theme-toggle {
-  font-family: var(--font-source-serif);
-  font-variant-caps: all-small-caps;
-  font-feature-settings: "c2sc" 1, "smcp" 1;
-  letter-spacing: 0.06em;
-  font-size: 12px;
-  border-top: 1px solid var(--border);
-  padding-top: 6px;
 }
 
 /* ─────────── Greeting widget — per-theme ─────────── */
