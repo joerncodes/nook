@@ -72,9 +72,8 @@ const immichWidget = baseWidget.extend({
   type: z.literal("immich"),
   baseUrl: z.string().url(),
   apiKey: z.string().min(1),
-  favorites: z.boolean().optional().default(false),
-  onThisDay: z.boolean().optional().default(false),
-  albumId: z.string().optional(),
+  mode: z.enum(["favorites", "onThisDay", "album"]).optional().default("favorites"),
+  albumId: z.string().optional(), // required when mode is "album"
   limit: z.number().int().min(1).max(20).optional().default(6),
   autoRotate: z.boolean().optional().default(true),
   orientation: z.enum(["landscape", "portrait"]).optional(),

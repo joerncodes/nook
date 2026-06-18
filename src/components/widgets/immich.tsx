@@ -8,11 +8,12 @@ import {
 import { ImmichCarousel } from "./immich-carousel";
 import { WidgetStat } from "./shared";
 
+type ImmichMode = "favorites" | "onThisDay" | "album";
+
 type Props = {
   baseUrl: string;
   apiKey: string;
-  favorites?: boolean;
-  onThisDay?: boolean;
+  mode?: ImmichMode;
   albumId?: string;
   limit?: number;
   autoRotate?: boolean;
@@ -21,10 +22,16 @@ type Props = {
 };
 
 function resolveSource(p: Props): ImmichSource | { error: string } {
-  if (p.albumId) return { kind: "album", albumId: p.albumId };
-  if (p.onThisDay) return { kind: "onThisDay" };
-  if (p.favorites) return { kind: "favorites" };
-  return { error: "set `favorites: true`, `onThisDay: true`, or `albumId: <id>`" };
+  switch (p.mode) {
+    case "album":
+      if (!p.albumId) return { error: "mode `album` requires `albumId`" };
+      return { kind: "album", albumId: p.albumId };
+    case "onThisDay":
+      return { kind: "onThisDay" };
+    case "favorites":
+    default:
+      return { kind: "favorites" };
+  }
 }
 
 function formatGb(bytes: number): string {
@@ -68,15 +75,14 @@ function renderMedia(
 export async function ImmichWidget({
   baseUrl,
   apiKey,
-  favorites = false,
-  onThisDay = false,
+  mode = "favorites",
   albumId,
   limit = 6,
   autoRotate = true,
   orientation,
   stats: showStats = true,
 }: Props) {
-  const source = resolveSource({ baseUrl, apiKey, favorites, onThisDay, albumId, limit });
+  const source = resolveSource({ baseUrl, apiKey, mode, albumId, limit });
   if ("error" in source) {
     return <div className="text-sm text-destructive">Immich: {source.error}</div>;
   }

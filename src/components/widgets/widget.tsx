@@ -60,8 +60,7 @@ function renderBody(w: Widget) {
         <ImmichWidget
           baseUrl={w.baseUrl}
           apiKey={w.apiKey}
-          favorites={w.favorites}
-          onThisDay={w.onThisDay}
+          mode={w.mode}
           albumId={w.albumId}
           limit={w.limit}
           autoRotate={w.autoRotate}
