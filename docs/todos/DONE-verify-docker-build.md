@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 ---
 
 # Verify Docker build end-to-end on Portainer host

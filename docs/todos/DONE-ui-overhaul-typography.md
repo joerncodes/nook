@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 ---
 
 # UI overhaul: typography-heavy, clean, minimalistic

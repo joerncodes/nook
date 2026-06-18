@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 ---
 
 # Visual QA the layout in a browser
