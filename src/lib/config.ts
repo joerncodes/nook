@@ -124,6 +124,14 @@ const linkwardenWidget = baseWidget.extend({
   searchPlaceholder: z.string().optional().default("Search bookmarks…"),
 });
 
+const kimaiWidget = baseWidget.extend({
+  type: z.literal("kimai"),
+  baseUrl: z.string().url(),
+  token: z.string().min(1),
+  limit: z.number().int().min(1).max(10).optional().default(5),
+  weekStart: z.enum(["monday", "sunday"]).optional().default("monday"),
+});
+
 const weatherWidget = baseWidget.extend({
   type: z.literal("weather"),
   lat: z.number().min(-90).max(90),
@@ -147,6 +155,7 @@ export const widgetSchema = z.discriminatedUnion("type", [
   edgewiseWidget,
   linkwardenWidget,
   calendarWidget,
+  kimaiWidget,
   weatherWidget,
 ]);
 

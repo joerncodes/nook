@@ -96,6 +96,15 @@ columns:
         searchPlaceholder: Search bookmarks…
         # collectionId: 3 # optional — scope recent + search to one collection
         # tagId: 12 # optional — scope to one tag (combinable with collectionId)
+      - type: kimai
+        title: Time this week
+        # Self-hosted, so reach it over the shared docker network by the
+        # service name and its INTERNAL port (not the host-published port).
+        baseUrl: http://kimai:8001
+        # User profile → API access → create a token (NOT your password).
+        token: REPLACE_WITH_YOUR_KIMAI_API_TOKEN
+        limit: 5 # top N projects by tracked time (1–10)
+        weekStart: monday # monday | sunday — when the week window opens
       - type: calendar
         title: Upcoming
         # ICS URLs are credentials in disguise — anyone with the URL can read

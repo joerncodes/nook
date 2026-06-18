@@ -18,6 +18,7 @@ Every widget in `dashboard.yaml` is an entry under `center:` or under one of the
 | [`immich`](#immich)         | Photo of the day (or carousel) from an Immich library.                 |
 | [`jellyfin`](#jellyfin)     | Latest-added pick from a Jellyfin server + library counts.             |
 | [`edgewise`](#edgewise)     | Knife backlog queue from an Edgewise instance.                         |
+| [`kimai`](#kimai)           | Time tracked this week, by top N projects, from a Kimai instance.      |
 
 A few conventions used in the tables:
 
@@ -338,6 +339,32 @@ Shows the top of the knife backlog from an Edgewise instance plus library counts
   baseUrl: https://edgewise.your.domain
   token: REPLACE_WITH_YOUR_EDGEWISE_TOKEN
   limit: 5
+```
+
+---
+
+## kimai
+
+Aggregated time tracked **this week**, broken down by the top N projects, from a self-hosted [Kimai](https://www.kimai.org/) instance. Sums the authenticated user's timesheets (the token's own account) for the current week and renders a **weekday stacked bar chart** (Mon–Sun, segments colored per project, today's column emphasized), a color-keyed project legend with per-project totals, and the weekly total. The chart reuses the same timesheets already fetched for the totals — no extra API calls. Durations reflect whatever rounding Kimai applies server-side.
+
+The week window opens at `00:00` on the configured `weekStart` weekday, in the server's timezone (the container `TZ`, e.g. `Europe/Berlin`) — set `TZ` correctly or the week boundary drifts.
+
+Self-hosted, so the same networking caveat as the other self-hosted widgets applies: when nook and Kimai share a docker network, point `baseUrl` at the service name and its **internal** container port (e.g. `http://kimai:8001`), not the host-published port.
+
+| Option      | Type                    | Default      | Description                                                              |
+| ----------- | ----------------------- | ------------ | ------------------------------------------------------------------------ |
+| `baseUrl`   | string                  | **required** | Kimai base URL.                                                          |
+| `token`     | string                  | **required** | API token from your Kimai user profile → API access (**not** your password). |
+| `limit`     | integer 1–10            | `5`          | Number of top projects (by tracked time) shown. The footer total still sums every project, with a `+N more` hint. |
+| `weekStart` | `"monday" \| "sunday"` | `monday`     | Which weekday the week window opens on.                                  |
+
+```yaml
+- type: kimai
+  title: Time this week
+  baseUrl: http://kimai:8001
+  token: REPLACE_WITH_YOUR_KIMAI_API_TOKEN
+  limit: 5
+  weekStart: monday
 ```
 
 ---

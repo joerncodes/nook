@@ -2734,3 +2734,174 @@
   letter-spacing: 0;
   opacity: 0.6;
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   Kimai widget — weekday stacked bar chart + color-keyed project legend.
+   ════════════════════════════════════════════════════════════════════ */
+
+.kimai {
+  /* Earthy categorical palette — legible on both light and dark cards. */
+  --kimai-cat-1: #c1654a;
+  --kimai-cat-2: #7c9885;
+  --kimai-cat-3: #cf9a3f;
+  --kimai-cat-4: #6b8aa8;
+  --kimai-cat-5: #9b6a8f;
+  --kimai-cat-6: #b0805a;
+  --kimai-cat-other: var(--muted-foreground);
+}
+
+.kimai-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 76px;
+  margin: 0 0 14px;
+}
+.kimai-col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+}
+.kimai-col-bar {
+  display: flex;
+  flex-direction: column-reverse; /* stack from the bottom up */
+  gap: 1px;
+  flex: 1 1 auto;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--muted);
+}
+.kimai-seg {
+  display: block;
+  width: 100%;
+  flex: 0 0 auto;
+}
+.kimai-col-label {
+  text-align: center;
+  color: var(--muted-foreground);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.kimai-col[data-today="true"] .kimai-col-label {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.kimai-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.kimai-row {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  min-width: 0;
+}
+.kimai-swatch {
+  flex: 0 0 auto;
+  align-self: center;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+}
+.kimai-project {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--foreground);
+}
+.kimai-duration {
+  flex: 0 0 auto;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.kimai-footer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0 0;
+}
+.kimai-total {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+}
+.kimai-total-label {
+  color: var(--muted-foreground);
+}
+.kimai-total-value {
+  margin: 0;
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.kimai-more {
+  color: var(--muted-foreground);
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+/* ─── Quartz — square segments, tracked uppercase mono labels ─── */
+[data-theme="quartz"] .kimai-col-bar,
+[data-theme="quartz"] .kimai-swatch {
+  border-radius: 0;
+}
+[data-theme="quartz"] .kimai-project {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 13px;
+}
+[data-theme="quartz"] .kimai-duration,
+[data-theme="quartz"] .kimai-total-value {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+[data-theme="quartz"] .kimai-col-label,
+[data-theme="quartz"] .kimai-total-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* ─── Atrium — Fraunces, italic durations and day labels ─── */
+[data-theme="atrium"] .kimai-project {
+  font-family: var(--font-heading);
+}
+[data-theme="atrium"] .kimai-duration,
+[data-theme="atrium"] .kimai-total-label,
+[data-theme="atrium"] .kimai-more,
+[data-theme="atrium"] .kimai-col-label {
+  font-family: var(--font-heading);
+  font-style: italic;
+}
+
+/* ─── Marginalia — small-caps Source Serif, hairline-square segments ─── */
+[data-theme="marginalia"] .kimai-col-bar,
+[data-theme="marginalia"] .kimai-swatch {
+  border-radius: 0;
+}
+[data-theme="marginalia"] .kimai-project {
+  font-family: var(--font-source-serif);
+  font-variant-caps: all-small-caps;
+  font-feature-settings: "c2sc" 1, "smcp" 1;
+  letter-spacing: 0.06em;
+}
+[data-theme="marginalia"] .kimai-duration,
+[data-theme="marginalia"] .kimai-total-label,
+[data-theme="marginalia"] .kimai-total-value,
+[data-theme="marginalia"] .kimai-more,
+[data-theme="marginalia"] .kimai-col-label {
+  font-family: var(--font-source-serif);
+  font-style: italic;
+}

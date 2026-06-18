@@ -13,6 +13,7 @@ import { JellyfinWidget } from "./jellyfin";
 import { EdgewiseWidget } from "./edgewise";
 import { LinkwardenWidget } from "./linkwarden";
 import { CalendarWidget } from "./calendar";
+import { KimaiWidget } from "./kimai";
 import { WeatherWidget } from "./weather";
 
 function renderBody(w: Widget) {
@@ -107,6 +108,15 @@ function renderBody(w: Widget) {
           showAllDay={w.showAllDay}
           relativeDays={w.relativeDays}
           showMonth={w.showMonth}
+          weekStart={w.weekStart}
+        />
+      );
+    case "kimai":
+      return (
+        <KimaiWidget
+          baseUrl={w.baseUrl}
+          token={w.token}
+          limit={w.limit}
           weekStart={w.weekStart}
         />
       );
