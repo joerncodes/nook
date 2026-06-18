@@ -42,3 +42,4 @@ next-env.d.ts
 
 # local dashboard config (contains api tokens) — see config/dashboard.example.yaml
 /config/dashboard.yaml
+/config/dashboard.yaml.bak

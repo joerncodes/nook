@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 ---
 
 # In-app modal for editing `config/dashboard.yaml`

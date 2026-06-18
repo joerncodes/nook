@@ -35,7 +35,7 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      className="theme-toggle"
+      className="icon-control"
       onClick={() => set(other)}
       aria-label={mode ? `Switch to ${other} mode` : "Toggle light or dark mode"}
     >
@@ -49,7 +49,7 @@ export function ThemeToggle() {
 function SunIcon() {
   return (
     <svg
-      className="theme-toggle-icon"
+      className="icon-control-icon"
       viewBox="0 0 512 512"
       fill="currentColor"
       aria-hidden="true"
@@ -62,7 +62,7 @@ function SunIcon() {
 function MoonIcon() {
   return (
     <svg
-      className="theme-toggle-icon"
+      className="icon-control-icon"
       viewBox="0 0 384 512"
       fill="currentColor"
       aria-hidden="true"

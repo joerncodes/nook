@@ -219,11 +219,40 @@ const DEFAULT_CONFIG: DashboardConfig = {
   ],
 };
 
-function configPath() {
+export function configPath() {
   return (
     process.env.CONFIG_PATH ??
     path.join(/* turbopackIgnore: true */ process.cwd(), "config", "dashboard.yaml")
   );
+}
+
+/**
+ * In-app config editing is a write endpoint, so it's off by default in
+ * production — opt in with NOOK_CONFIG_EDIT=true (only behind a trusted
+ * network / auth). Always on in dev for convenience.
+ */
+export function configEditEnabled() {
+  return (
+    process.env.NOOK_CONFIG_EDIT === "true" ||
+    process.env.NODE_ENV !== "production"
+  );
+}
+
+/** Validate raw YAML against the schema without writing. */
+export function validateConfigText(
+  text: string,
+): { ok: true } | { ok: false; error: string } {
+  let parsed: unknown;
+  try {
+    parsed = parseYaml(text);
+  } catch (e) {
+    return { ok: false, error: `YAML parse error: ${e instanceof Error ? e.message : String(e)}` };
+  }
+  const result = dashboardConfigSchema.safeParse(parsed ?? {});
+  if (result.success) return { ok: true };
+  const first = result.error.issues[0];
+  const where = first.path.length ? ` at \`${first.path.join(".")}\`` : "";
+  return { ok: false, error: `${first.message}${where}` };
 }
 
 export async function loadConfig(): Promise<DashboardConfig> {

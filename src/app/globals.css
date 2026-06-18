@@ -371,12 +371,17 @@
   transform-origin: center;
 }
 
-/* ─────────── Light/dark toggle — fixed-corner sun/moon icon ─────────── */
-.theme-toggle {
+/* ─────────── Fixed-corner controls (theme toggle + config edit) ─────────── */
+.top-controls {
   position: fixed;
   top: 18px;
   right: 20px;
   z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.icon-control {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -390,26 +395,129 @@
   opacity: 0.55;
   transition: opacity 160ms ease, color 160ms ease;
 }
-.theme-toggle:hover,
-.theme-toggle:focus-visible {
+.icon-control:hover,
+.icon-control:focus-visible {
   opacity: 1;
   color: var(--foreground);
   outline: none;
 }
 /* Dark backgrounds swallow the muted gray — use the brighter foreground. */
-.dark .theme-toggle {
+.dark .icon-control {
   color: var(--foreground);
   opacity: 0.7;
 }
-.theme-toggle-icon {
+.icon-control-icon {
   width: 16px;
   height: 16px;
   display: block;
 }
 
-[data-theme="quartz"] .theme-toggle:hover,
-[data-theme="quartz"] .theme-toggle:focus-visible {
+[data-theme="quartz"] .icon-control:hover,
+[data-theme="quartz"] .icon-control:focus-visible {
   color: var(--signal);
+}
+
+/* ─────────── Config editor modal ─────────── */
+.config-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: color-mix(in srgb, var(--foreground) 35%, transparent);
+  backdrop-filter: blur(2px);
+}
+.config-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(820px, 100%);
+  max-height: 85vh;
+  padding: 20px;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) + 6px);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.5);
+}
+.config-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.config-modal-title {
+  font-family: var(--font-mono);
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+.config-modal-x {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 1;
+  padding: 4px;
+}
+.config-modal-x:hover {
+  color: var(--foreground);
+}
+.config-modal-textarea {
+  flex: 1 1 auto;
+  min-height: 50vh;
+  resize: vertical;
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+.config-modal-textarea:focus {
+  outline: none;
+  border-color: var(--ring);
+}
+.config-modal-error {
+  margin: 0;
+  color: var(--destructive);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+.config-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.config-modal-btn {
+  padding: 7px 16px;
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+.config-modal-btn:hover:not(:disabled) {
+  border-color: var(--ring);
+}
+.config-modal-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.config-modal-btn-primary {
+  background: var(--signal);
+  color: var(--primary-foreground);
+  border-color: var(--signal);
 }
 
 /* ─────────── Greeting widget — per-theme ─────────── */
