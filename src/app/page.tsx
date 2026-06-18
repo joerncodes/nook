@@ -1,6 +1,7 @@
 import { loadConfig } from "@/lib/config";
 import { WidgetRenderer } from "@/components/widgets/widget";
 import { AtriumDayBar } from "@/components/atrium-day-bar";
+import { ThemeToggle } from "@/components/theme-toggle";
 import type { DashboardConfig, Theme } from "@/lib/config";
 
 export const dynamic = "force-dynamic";
@@ -65,6 +66,7 @@ export default async function Home() {
       className="min-h-dvh bg-background text-foreground font-sans relative"
     >
       {theme === "atrium" && <AtriumDayBar />}
+      <ThemeToggle />
 
       <div
         className={`mx-auto grid min-h-dvh max-w-[140rem] ${themeGap} px-8 ${themeYPad}`}

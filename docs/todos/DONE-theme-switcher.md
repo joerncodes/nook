@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 ---
 
 # Light/dark theme switcher

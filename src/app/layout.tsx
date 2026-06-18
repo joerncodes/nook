@@ -6,6 +6,7 @@ import {
   Source_Serif_4,
 } from "next/font/google";
 import "./globals.css";
+import { themeInitScript } from "@/components/theme-toggle";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -50,7 +51,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${fontVars} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${fontVars} h-full antialiased`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
