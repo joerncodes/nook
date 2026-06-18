@@ -24,6 +24,8 @@ export type WeatherSnapshot = {
     condition: WeatherCondition;
     label: string;
     wind: number;
+    todayMax?: number;
+    todayMin?: number;
   };
   daily: WeatherDay[];
   units: {
@@ -134,12 +136,19 @@ export async function fetchWeather({
       };
     });
 
+  const todayMaxRaw = dailyMax[0];
+  const todayMinRaw = dailyMin[0];
+
   return {
     current: {
       temperature: Math.round(c.temperature_2m ?? 0),
       condition: currentDecoded.condition,
       label: currentDecoded.label,
       wind: Math.round(c.wind_speed_10m ?? 0),
+      todayMax:
+        typeof todayMaxRaw === "number" ? Math.round(todayMaxRaw) : undefined,
+      todayMin:
+        typeof todayMinRaw === "number" ? Math.round(todayMinRaw) : undefined,
     },
     daily,
     units: {

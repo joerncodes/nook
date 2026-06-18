@@ -40,6 +40,60 @@ function dayName(iso: string): string {
   return d.toLocaleDateString("en-GB", { weekday: "short" });
 }
 
+function WeatherDayRange({
+  current,
+  min,
+  max,
+  unit,
+}: {
+  current: number;
+  min?: number;
+  max?: number;
+  unit: string;
+}) {
+  if (typeof min !== "number" || typeof max !== "number" || max <= min) {
+    if (typeof max === "number") {
+      return (
+        <div className="weather-high">
+          high of {max}
+          {unit}
+        </div>
+      );
+    }
+    return null;
+  }
+  const ratio = Math.min(1, Math.max(0, (current - min) / (max - min)));
+  return (
+    <div className="weather-range" aria-label={`Current ${current}${unit}, today's range ${min}${unit} to ${max}${unit}`}>
+      <span className="weather-range-end weather-range-low">
+        {min}
+        {unit}
+      </span>
+      <span
+        className="weather-range-track"
+        role="progressbar"
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuenow={current}
+      >
+        <span
+          className="weather-range-fill"
+          style={{ width: `${ratio * 100}%` }}
+        />
+        <span
+          className="weather-range-marker"
+          style={{ left: `${ratio * 100}%` }}
+          aria-hidden="true"
+        />
+      </span>
+      <span className="weather-range-end weather-range-high">
+        {max}
+        {unit}
+      </span>
+    </div>
+  );
+}
+
 export async function WeatherWidget({ lat, lon, label, units, days }: Props) {
   let snap;
   try {
@@ -66,6 +120,12 @@ export async function WeatherWidget({ lat, lon, label, units, days }: Props) {
             {label && <span className="weather-meta-sep">·</span>}
             <span className="weather-condition">{snap.current.label}</span>
           </div>
+          <WeatherDayRange
+            current={snap.current.temperature}
+            min={snap.current.todayMin}
+            max={snap.current.todayMax}
+            unit={snap.units.temp}
+          />
         </div>
       </div>
 

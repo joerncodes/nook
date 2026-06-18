@@ -85,6 +85,8 @@ const jellyfinWidget = baseWidget.extend({
   baseUrl: z.string().url(),
   apiKey: z.string().min(1),
   userId: z.string().min(1),
+  showLatestMovie: z.boolean().optional().default(true),
+  coverSize: z.enum(["small", "medium", "large"]).optional().default("medium"),
 });
 
 const edgewiseWidget = baseWidget.extend({
@@ -92,6 +94,23 @@ const edgewiseWidget = baseWidget.extend({
   baseUrl: z.string().url(),
   token: z.string().min(1),
   limit: z.number().int().min(1).max(20).optional().default(5),
+});
+
+const calendarSource = z.object({
+  url: z.string().url(),
+  label: z.string().optional(),
+  color: z.string().optional(),
+});
+
+const calendarWidget = baseWidget.extend({
+  type: z.literal("calendar"),
+  sources: z.array(calendarSource).min(1),
+  limit: z.number().int().min(1).max(20).optional().default(5),
+  days: z.number().int().min(1).max(60).optional().default(14),
+  showAllDay: z.boolean().optional().default(true),
+  relativeDays: z.boolean().optional().default(true),
+  showMonth: z.boolean().optional().default(true),
+  weekStart: z.enum(["mon", "sun"]).optional().default("mon"),
 });
 
 const linkwardenWidget = baseWidget.extend({
@@ -127,6 +146,7 @@ export const widgetSchema = z.discriminatedUnion("type", [
   jellyfinWidget,
   edgewiseWidget,
   linkwardenWidget,
+  calendarWidget,
   weatherWidget,
 ]);
 

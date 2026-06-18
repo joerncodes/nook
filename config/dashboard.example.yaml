@@ -84,6 +84,8 @@ columns:
         # Dashboard → Users → pick a user → URL contains the userId,
         # or GET /Users with the API key
         userId: REPLACE_WITH_YOUR_JELLYFIN_USER_ID
+        showLatestMovie: true # set false to hide the latest-added pick row entirely
+        coverSize: medium # poster width when shown: small (48px) | medium (96px) | large (160px)
       - type: linkwarden
         title: Bookmarks
         baseUrl: https://linkwarden.your.domain
@@ -94,3 +96,22 @@ columns:
         searchPlaceholder: Search bookmarks…
         # collectionId: 3 # optional — scope recent + search to one collection
         # tagId: 12 # optional — scope to one tag (combinable with collectionId)
+      - type: calendar
+        title: Upcoming
+        # ICS URLs are credentials in disguise — anyone with the URL can read
+        # your calendar. This file is gitignored; keep it that way.
+        sources:
+          - label: Personal
+            color: "#7c9885"
+            # Google: Calendar settings → integrate calendar → "Secret address in iCal format"
+            # iCloud: share calendar → public → use the webcal:// URL (we rewrite to https)
+            url: https://calendar.google.com/calendar/ical/.../basic.ics
+          - label: Work
+            color: "#b08968"
+            url: https://nextcloud.example/remote.php/dav/calendars/me/work?export
+        limit: 5 # max events shown (1–20)
+        days: 14 # look-ahead window (1–60); set to 31 for full-month dot coverage
+        showAllDay: true
+        relativeDays: true # "Today" / "Tomorrow" labels; false = always "Wed 18 Jun"
+        showMonth: true # mini month grid above the events with today as an accent badge
+        weekStart: mon # mon | sun

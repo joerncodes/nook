@@ -2,6 +2,8 @@ export type JellyfinLatestMovie = {
   id: string;
   name: string;
   productionYear?: number;
+  directors: string[];
+  cast: string[];
 };
 
 export type JellyfinSummary = {
@@ -12,11 +14,18 @@ export type JellyfinSummary = {
 
 type CountResponse = { TotalRecordCount?: number };
 
+type JellyfinPerson = {
+  Name?: string;
+  Type?: string;
+  Role?: string;
+};
+
 type LatestItem = {
   Id: string;
   Name: string;
   ProductionYear?: number;
   Type?: string;
+  People?: JellyfinPerson[];
 };
 
 function authHeaders(apiKey: string): HeadersInit {
@@ -66,7 +75,7 @@ async function fetchLatestMovies(opts: {
   url.searchParams.set("SortBy", "DateCreated");
   url.searchParams.set("SortOrder", "Descending");
   url.searchParams.set("Limit", String(opts.limit));
-  url.searchParams.set("Fields", "ProductionYear");
+  url.searchParams.set("Fields", "ProductionYear,People");
 
   const res = await fetch(url.toString(), {
     headers: authHeaders(opts.apiKey),
@@ -77,11 +86,25 @@ async function fetchLatestMovies(opts: {
   }
   const json = (await res.json()) as { Items?: LatestItem[] };
   const items = json.Items ?? [];
-  return items.map((m) => ({
-    id: m.Id,
-    name: m.Name,
-    productionYear: m.ProductionYear,
-  }));
+  return items.map((m) => {
+    const people = m.People ?? [];
+    const directors = people
+      .filter((p) => p.Type === "Director")
+      .map((p) => p.Name?.trim())
+      .filter((n): n is string => Boolean(n));
+    const cast = people
+      .filter((p) => p.Type === "Actor")
+      .map((p) => p.Name?.trim())
+      .filter((n): n is string => Boolean(n))
+      .slice(0, 3);
+    return {
+      id: m.Id,
+      name: m.Name,
+      productionYear: m.ProductionYear,
+      directors,
+      cast,
+    };
+  });
 }
 
 export async function fetchJellyfinSummary(opts: {

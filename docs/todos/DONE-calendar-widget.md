@@ -1,5 +1,5 @@
 ---
-status: open
+status: done
 ---
 
 # Calendar (ICS) widget

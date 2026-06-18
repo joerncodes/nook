@@ -12,6 +12,7 @@ import { ImmichWidget } from "./immich";
 import { JellyfinWidget } from "./jellyfin";
 import { EdgewiseWidget } from "./edgewise";
 import { LinkwardenWidget } from "./linkwarden";
+import { CalendarWidget } from "./calendar";
 import { WeatherWidget } from "./weather";
 
 function renderBody(w: Widget) {
@@ -73,6 +74,8 @@ function renderBody(w: Widget) {
           baseUrl={w.baseUrl}
           apiKey={w.apiKey}
           userId={w.userId}
+          showLatestMovie={w.showLatestMovie}
+          coverSize={w.coverSize}
         />
       );
     case "edgewise":
@@ -93,6 +96,18 @@ function renderBody(w: Widget) {
           limit={w.limit}
           search={w.search}
           searchPlaceholder={w.searchPlaceholder}
+        />
+      );
+    case "calendar":
+      return (
+        <CalendarWidget
+          sources={w.sources}
+          limit={w.limit}
+          days={w.days}
+          showAllDay={w.showAllDay}
+          relativeDays={w.relativeDays}
+          showMonth={w.showMonth}
+          weekStart={w.weekStart}
         />
       );
     case "weather":
