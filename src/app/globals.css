@@ -1225,6 +1225,32 @@
   margin: 0;
 }
 
+/* Figure wraps the single image + its metadata caption so they sit tight
+   together (the .immich container's larger gap separates them from stats). */
+.immich-figure {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.immich-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  color: var(--muted-foreground);
+  font-size: 0.82em;
+}
+.immich-date {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.immich-people {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Carousel — images stacked absolutely in the frame, crossfade via opacity. */
 .immich-carousel {
   display: flex;
@@ -1306,6 +1332,12 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
+[data-theme="quartz"] .immich-caption {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 
 /* ─── Atrium — soft elevation, italic lowercase position ─── */
 [data-theme="atrium"] .immich-single,
@@ -1323,6 +1355,11 @@
   font-family: var(--font-heading);
   font-style: italic;
   text-transform: lowercase;
+}
+[data-theme="atrium"] .immich-caption {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-size: 13px;
 }
 
 /* ─── Marginalia — book-plate, small-caps position ─── */
@@ -1343,6 +1380,11 @@
 }
 [data-theme="marginalia"] .immich-empty {
   font-style: italic;
+}
+[data-theme="marginalia"] .immich-caption {
+  font-family: var(--font-source-serif);
+  font-style: italic;
+  font-size: 12px;
 }
 
 /* hideWhenDone: collapse the entire wrapping card when the marker is present.

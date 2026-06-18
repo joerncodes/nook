@@ -77,6 +77,7 @@ columns:
         limit: 6
         autoRotate: true # set false to require manual → clicks
         stats: true # set false to hide the photos/videos/storage row
+        metadata: false # caption each photo with its date + recognised people
         # orientation: portrait # optional: landscape | portrait — filter by aspect ratio
       - type: jellyfin
         title: Library

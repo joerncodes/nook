@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from "react";
 
+import { formatPhotoDate } from "@/lib/immich";
+
 type Asset = {
   id: string;
   originalFileName?: string;
+  localDateTime?: string;
   width?: number;
   height?: number;
+  people?: string[];
 };
 
 type Props = {
@@ -14,6 +18,7 @@ type Props = {
   assets: Asset[];
   intervalMs?: number;
   autoRotate?: boolean;
+  showMeta?: boolean;
 };
 
 function pad(n: number, width: number) {
@@ -25,6 +30,7 @@ export function ImmichCarousel({
   assets,
   intervalMs = 8000,
   autoRotate = true,
+  showMeta = false,
 }: Props) {
   const total = assets.length;
   const [i, setI] = useState(0);
@@ -73,6 +79,18 @@ export function ImmichCarousel({
           />
         ))}
       </a>
+      {showMeta && (formatPhotoDate(current.localDateTime) || current.people?.length) ? (
+        <div className="immich-caption">
+          {formatPhotoDate(current.localDateTime) && (
+            <span className="immich-date">
+              {formatPhotoDate(current.localDateTime)}
+            </span>
+          )}
+          {current.people && current.people.length > 0 && (
+            <span className="immich-people">{current.people.join(", ")}</span>
+          )}
+        </div>
+      ) : null}
       <div className="immich-carousel-meta">
         <span className="immich-carousel-pos">
           {pad(i + 1, padW)} / {pad(total, padW)}

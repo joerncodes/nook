@@ -66,6 +66,7 @@ function renderBody(w: Widget) {
           autoRotate={w.autoRotate}
           orientation={w.orientation}
           stats={w.stats}
+          metadata={w.metadata}
         />
       );
     case "jellyfin":

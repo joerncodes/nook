@@ -78,6 +78,7 @@ const immichWidget = baseWidget.extend({
   autoRotate: z.boolean().optional().default(true),
   orientation: z.enum(["landscape", "portrait"]).optional(),
   stats: z.boolean().optional().default(true),
+  metadata: z.boolean().optional().default(false),
 });
 
 const jellyfinWidget = baseWidget.extend({

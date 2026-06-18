@@ -285,6 +285,7 @@ The source is chosen by `mode`. `album` additionally requires `albumId`.
 | `autoRotate`  | boolean                               | `true`       | Auto-advance the carousel. `false` requires manual → click to advance.               |
 | `orientation` | `"landscape" \| "portrait"`            | —            | Filter the candidate pool to one orientation. Omit to allow both.                    |
 | `stats`       | boolean                               | `true`       | Show the photos/videos/storage stats row below the image.                            |
+| `metadata`    | boolean                               | `false`      | Caption each photo with the date it was taken and any recognised people. Enriches each shown photo with a per-asset fetch (faces aren't in the list response), so it costs up to `limit` extra cached calls. |
 
 ```yaml
 - type: immich
@@ -296,6 +297,7 @@ The source is chosen by `mode`. `album` additionally requires `albumId`.
   limit: 6
   autoRotate: true
   stats: true
+  metadata: false # caption with photo date + recognised people
 ```
 
 ---

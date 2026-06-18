@@ -1,6 +1,7 @@
 import {
   fetchImmichAssets,
   fetchImmichStatistics,
+  formatPhotoDate,
   type ImmichAsset,
   type ImmichSource,
   type ImmichStatistics,
@@ -19,7 +20,22 @@ type Props = {
   autoRotate?: boolean;
   orientation?: "landscape" | "portrait";
   stats?: boolean;
+  metadata?: boolean;
 };
+
+function ImmichCaption({ asset }: { asset: ImmichAsset }) {
+  const date = formatPhotoDate(asset.localDateTime);
+  const people = asset.people ?? [];
+  if (!date && people.length === 0) return null;
+  return (
+    <div className="immich-caption">
+      {date && <span className="immich-date">{date}</span>}
+      {people.length > 0 && (
+        <span className="immich-people">{people.join(", ")}</span>
+      )}
+    </div>
+  );
+}
 
 function resolveSource(p: Props): ImmichSource | { error: string } {
   switch (p.mode) {
@@ -43,32 +59,43 @@ function renderMedia(
   assets: ImmichAsset[],
   autoRotate: boolean,
   emptyLabel: string,
+  metadata: boolean,
 ) {
   if (assets.length === 0) {
     return <p className="immich-empty">{emptyLabel}</p>;
   }
   if (assets.length > 1) {
-    return <ImmichCarousel baseUrl={baseUrl} assets={assets} autoRotate={autoRotate} />;
+    return (
+      <ImmichCarousel
+        baseUrl={baseUrl}
+        assets={assets}
+        autoRotate={autoRotate}
+        showMeta={metadata}
+      />
+    );
   }
   const a = assets[0];
   const ratio = a.width && a.height ? `${a.width} / ${a.height}` : "3 / 2";
   return (
-    <a
-      href={`${baseUrl.replace(/\/$/, "")}/photos/${a.id}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="immich-single"
-      title={a.originalFileName ?? ""}
-      style={{ aspectRatio: ratio }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        className="immich-thumb"
-        src={`/api/immich/${a.id}/thumb`}
-        alt=""
-        loading="lazy"
-      />
-    </a>
+    <div className="immich-figure">
+      <a
+        href={`${baseUrl.replace(/\/$/, "")}/photos/${a.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="immich-single"
+        title={a.originalFileName ?? ""}
+        style={{ aspectRatio: ratio }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="immich-thumb"
+          src={`/api/immich/${a.id}/thumb`}
+          alt=""
+          loading="lazy"
+        />
+      </a>
+      {metadata && <ImmichCaption asset={a} />}
+    </div>
   );
 }
 
@@ -81,6 +108,7 @@ export async function ImmichWidget({
   autoRotate = true,
   orientation,
   stats: showStats = true,
+  metadata = false,
 }: Props) {
   const source = resolveSource({ baseUrl, apiKey, mode, albumId, limit });
   if ("error" in source) {
@@ -93,7 +121,14 @@ export async function ImmichWidget({
   let stats: ImmichStatistics | null = null;
   let error: string | null = null;
   try {
-    const assetsP = fetchImmichAssets({ baseUrl, apiKey, source, limit, orientation });
+    const assetsP = fetchImmichAssets({
+      baseUrl,
+      apiKey,
+      source,
+      limit,
+      orientation,
+      withMetadata: metadata,
+    });
     const statsP = showStats
       ? fetchImmichStatistics({ baseUrl, apiKey })
       : Promise.resolve(null);
@@ -108,7 +143,7 @@ export async function ImmichWidget({
 
   return (
     <div className="immich">
-      {renderMedia(baseUrl, assets, autoRotate, emptyLabel)}
+      {renderMedia(baseUrl, assets, autoRotate, emptyLabel, metadata)}
       {showStats && stats && (
         <dl className="widget-counts">
           <WidgetStat label="Photos" value={stats.photos} />

@@ -2,9 +2,25 @@ export type ImmichAsset = {
   id: string;
   originalFileName?: string;
   fileCreatedAt?: string;
+  /** When the photo was taken (timezone-agnostic), used for the caption. */
+  localDateTime?: string;
   width?: number;
   height?: number;
+  /** Recognised, non-hidden people; undefined when not enriched. */
+  people?: string[];
 };
+
+/** Human date for a photo, e.g. "12 Jun 2019". Pure — safe on client too. */
+export function formatPhotoDate(iso?: string): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
 
 type MetadataSearchBody = {
   isFavorite?: boolean;
@@ -24,9 +40,15 @@ type SearchResponse = {
   };
 };
 
-// Memory assets carry their dimensions under exifInfo rather than top-level.
-type RawAsset = ImmichAsset & {
-  exifInfo?: { exifImageWidth?: number | null; exifImageHeight?: number | null };
+// Memory/detail assets carry dimensions + date under exifInfo, and people as
+// objects rather than the flattened shapes ImmichAsset exposes.
+type RawAsset = Omit<ImmichAsset, "people"> & {
+  exifInfo?: {
+    exifImageWidth?: number | null;
+    exifImageHeight?: number | null;
+    dateTimeOriginal?: string | null;
+  };
+  people?: { name?: string | null; isHidden?: boolean }[];
 };
 
 type MemoryResponse = {
@@ -49,13 +71,35 @@ function matchesOrientation(a: ImmichAsset, want: ImmichOrientation): boolean {
 }
 
 function normalizeAsset(a: RawAsset): ImmichAsset {
+  const people = a.people
+    ?.filter((p) => p && p.name && !p.isHidden)
+    .map((p) => p.name as string);
   return {
     id: a.id,
     originalFileName: a.originalFileName,
     fileCreatedAt: a.fileCreatedAt,
+    localDateTime: a.localDateTime ?? a.exifInfo?.dateTimeOriginal ?? a.fileCreatedAt,
     width: a.width ?? a.exifInfo?.exifImageWidth ?? undefined,
     height: a.height ?? a.exifInfo?.exifImageHeight ?? undefined,
+    people: people && people.length ? people : undefined,
   };
+}
+
+// Per-asset detail — the only response that reliably populates `people`
+// (face recognition) and full EXIF. Used to enrich displayed assets when the
+// metadata caption is enabled.
+async function fetchImmichAssetDetail(
+  baseUrl: string,
+  apiKey: string,
+  id: string,
+): Promise<ImmichAsset | null> {
+  const url = `${baseUrl.replace(/\/$/, "")}/api/assets/${id}`;
+  const res = await fetch(url, {
+    headers: { "x-api-key": apiKey, accept: "application/json" },
+    next: { revalidate: 600, tags: ["immich-assets"] },
+  });
+  if (!res.ok) return null;
+  return normalizeAsset((await res.json()) as RawAsset);
 }
 
 // "On this day" — Immich's memory lanes for the current calendar day across
@@ -89,6 +133,7 @@ export async function fetchImmichAssets(opts: {
   source: ImmichSource;
   limit: number;
   orientation?: ImmichOrientation;
+  withMetadata?: boolean;
 }): Promise<ImmichAsset[]> {
   let items: ImmichAsset[];
 
@@ -126,14 +171,26 @@ export async function fetchImmichAssets(opts: {
       throw new Error(`Immich: ${res.status} ${res.statusText}`);
     }
     const json = (await res.json()) as SearchResponse;
-    items = json.assets?.items ?? [];
+    items = (json.assets?.items ?? []).map((a) => normalizeAsset(a as RawAsset));
   }
 
-  if (opts.orientation) {
-    const want = opts.orientation;
-    return items.filter((a) => matchesOrientation(a, want)).slice(0, opts.limit);
+  const final = opts.orientation
+    ? items
+        .filter((a) => matchesOrientation(a, opts.orientation!))
+        .slice(0, opts.limit)
+    : items.slice(0, opts.limit);
+
+  // List/memory responses don't reliably include face data — enrich the few
+  // assets we actually show with a per-asset fetch when the caption needs it.
+  if (opts.withMetadata && final.length > 0) {
+    return Promise.all(
+      final.map(async (a) => {
+        const detail = await fetchImmichAssetDetail(opts.baseUrl, opts.apiKey, a.id);
+        return detail ?? a;
+      }),
+    );
   }
-  return items.slice(0, opts.limit);
+  return final;
 }
 
 export type ImmichStatistics = {
