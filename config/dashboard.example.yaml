@@ -71,7 +71,8 @@ columns:
         baseUrl: https://immich.your.domain
         # User settings → API Keys
         apiKey: REPLACE_WITH_YOUR_IMMICH_API_KEY
-        favorites: true # OR: albumId: <album-id>
+        favorites: true # source — pick one: favorites | onThisDay: true | albumId: <album-id>
+        # onThisDay: true # "memories" — photos from this calendar day in past years
         limit: 6
         autoRotate: true # set false to require manual → clicks
         stats: true # set false to hide the photos/videos/storage row

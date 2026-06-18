@@ -61,6 +61,7 @@ function renderBody(w: Widget) {
           baseUrl={w.baseUrl}
           apiKey={w.apiKey}
           favorites={w.favorites}
+          onThisDay={w.onThisDay}
           albumId={w.albumId}
           limit={w.limit}
           autoRotate={w.autoRotate}

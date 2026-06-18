@@ -12,6 +12,7 @@ type Props = {
   baseUrl: string;
   apiKey: string;
   favorites?: boolean;
+  onThisDay?: boolean;
   albumId?: string;
   limit?: number;
   autoRotate?: boolean;
@@ -21,17 +22,23 @@ type Props = {
 
 function resolveSource(p: Props): ImmichSource | { error: string } {
   if (p.albumId) return { kind: "album", albumId: p.albumId };
+  if (p.onThisDay) return { kind: "onThisDay" };
   if (p.favorites) return { kind: "favorites" };
-  return { error: "set `favorites: true` or `albumId: <id>`" };
+  return { error: "set `favorites: true`, `onThisDay: true`, or `albumId: <id>`" };
 }
 
 function formatGb(bytes: number): string {
   return `${(bytes / 1e9).toFixed(1)} GB`;
 }
 
-function renderMedia(baseUrl: string, assets: ImmichAsset[], autoRotate: boolean) {
+function renderMedia(
+  baseUrl: string,
+  assets: ImmichAsset[],
+  autoRotate: boolean,
+  emptyLabel: string,
+) {
   if (assets.length === 0) {
-    return <p className="immich-empty">No photos yet.</p>;
+    return <p className="immich-empty">{emptyLabel}</p>;
   }
   if (assets.length > 1) {
     return <ImmichCarousel baseUrl={baseUrl} assets={assets} autoRotate={autoRotate} />;
@@ -62,16 +69,19 @@ export async function ImmichWidget({
   baseUrl,
   apiKey,
   favorites = false,
+  onThisDay = false,
   albumId,
   limit = 6,
   autoRotate = true,
   orientation,
   stats: showStats = true,
 }: Props) {
-  const source = resolveSource({ baseUrl, apiKey, favorites, albumId, limit });
+  const source = resolveSource({ baseUrl, apiKey, favorites, onThisDay, albumId, limit });
   if ("error" in source) {
     return <div className="text-sm text-destructive">Immich: {source.error}</div>;
   }
+  const emptyLabel =
+    source.kind === "onThisDay" ? "No memories for today." : "No photos yet.";
 
   let assets: ImmichAsset[] = [];
   let stats: ImmichStatistics | null = null;
@@ -92,7 +102,7 @@ export async function ImmichWidget({
 
   return (
     <div className="immich">
-      {renderMedia(baseUrl, assets, autoRotate)}
+      {renderMedia(baseUrl, assets, autoRotate, emptyLabel)}
       {showStats && stats && (
         <dl className="widget-counts">
           <WidgetStat label="Photos" value={stats.photos} />

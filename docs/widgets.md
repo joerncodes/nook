@@ -273,12 +273,15 @@ Recent saves plus a search field with autocomplete over the full library. Search
 
 Photo of the day from an Immich library, with optional auto-rotating crossfade carousel.
 
+Pick exactly one source: `albumId`, `onThisDay`, or `favorites`. If more than one is set, the first of that order wins.
+
 | Option        | Type                       | Default      | Description                                                                          |
 | ------------- | -------------------------- | ------------ | ------------------------------------------------------------------------------------ |
 | `baseUrl`     | string                     | **required** | Immich base URL.                                                                     |
 | `apiKey`      | string                     | **required** | API key — Immich User Settings → API Keys.                                           |
-| `favorites`   | boolean                    | `false`      | Pull from your favorites. Either this OR `albumId`.                                  |
-| `albumId`     | string                     | —            | Pull from a specific album. Either this OR `favorites`.                              |
+| `favorites`   | boolean                    | `false`      | Pull from your favorites.                                                            |
+| `onThisDay`   | boolean                    | `false`      | Pull from Immich "memories" — photos taken on this calendar day in previous years (`GET /api/memories`). Takes precedence over `favorites`. |
+| `albumId`     | string                     | —            | Pull from a specific album. Takes precedence over the others.                       |
 | `limit`       | integer 1–20               | `6`          | Pool size to sample from / rotate through.                                           |
 | `autoRotate`  | boolean                    | `true`       | Auto-advance the carousel. `false` requires manual → click to advance.               |
 | `orientation` | `"landscape" \| "portrait"` | —            | Filter the candidate pool to one orientation. Omit to allow both.                    |
