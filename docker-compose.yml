@@ -12,8 +12,13 @@ services:
       NODE_ENV: production
       CONFIG_PATH: /config/dashboard.yaml
       TZ: ${TZ:-Europe/Berlin}
+      # In-app dashboard.yaml editor (pencil button, top-right). This is an
+      # UNAUTHENTICATED write endpoint — only enable behind a trusted network
+      # (Tailscale, auth proxy), and drop the `:ro` on the volume below so
+      # saves can write to disk.
+      # NOOK_CONFIG_EDIT: "true"
     volumes:
-      - ./config:/config:ro
+      - ./config:/config:ro # drop `:ro` if you enable NOOK_CONFIG_EDIT
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/"]
       interval: 30s
