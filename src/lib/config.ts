@@ -94,6 +94,17 @@ const edgewiseWidget = baseWidget.extend({
   limit: z.number().int().min(1).max(20).optional().default(5),
 });
 
+const linkwardenWidget = baseWidget.extend({
+  type: z.literal("linkwarden"),
+  baseUrl: z.string().url(),
+  token: z.string().min(1),
+  collectionId: z.number().int().optional(),
+  tagId: z.number().int().optional(),
+  limit: z.number().int().min(1).max(20).optional().default(8),
+  search: z.boolean().optional().default(true),
+  searchPlaceholder: z.string().optional().default("Search bookmarks…"),
+});
+
 const weatherWidget = baseWidget.extend({
   type: z.literal("weather"),
   lat: z.number().min(-90).max(90),
@@ -115,6 +126,7 @@ export const widgetSchema = z.discriminatedUnion("type", [
   immichWidget,
   jellyfinWidget,
   edgewiseWidget,
+  linkwardenWidget,
   weatherWidget,
 ]);
 

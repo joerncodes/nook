@@ -21,8 +21,9 @@ export async function fetchDailyReview(
 ): Promise<ReadwiseReview> {
   const res = await fetch("https://readwise.io/api/v2/review/", {
     headers: { Authorization: `Token ${token}` },
-    // The daily review changes once per day — cache for an hour.
-    next: { revalidate: 3600, tags: ["readwise-review"] },
+    // Readwise rolls the daily review at a per-account scheduled time.
+    // Cache briefly so we pick it up within ~5 minutes of rollover.
+    next: { revalidate: 300, tags: ["readwise-review"] },
   });
   if (!res.ok) {
     throw new Error(`Readwise: ${res.status} ${res.statusText}`);

@@ -12,7 +12,6 @@ export async function ReadwiseWidget({
     const review = await fetchDailyReview(token);
     return (
       <ReadwiseClient
-        reviewId={review.review_id}
         reviewUrl={review.review_url}
         highlights={review.highlights}
         showImage={showImage}

@@ -11,6 +11,7 @@ import { TodoistWidget } from "./todoist";
 import { ImmichWidget } from "./immich";
 import { JellyfinWidget } from "./jellyfin";
 import { EdgewiseWidget } from "./edgewise";
+import { LinkwardenWidget } from "./linkwarden";
 import { WeatherWidget } from "./weather";
 
 function renderBody(w: Widget) {
@@ -80,6 +81,18 @@ function renderBody(w: Widget) {
           baseUrl={w.baseUrl}
           token={w.token}
           limit={w.limit}
+        />
+      );
+    case "linkwarden":
+      return (
+        <LinkwardenWidget
+          baseUrl={w.baseUrl}
+          token={w.token}
+          collectionId={w.collectionId}
+          tagId={w.tagId}
+          limit={w.limit}
+          search={w.search}
+          searchPlaceholder={w.searchPlaceholder}
         />
       );
     case "weather":

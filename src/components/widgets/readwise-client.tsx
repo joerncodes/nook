@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReadwiseHighlight } from "@/lib/readwise";
 
 type Props = {
-  reviewId: number;
   reviewUrl: string;
   highlights: ReadwiseHighlight[];
   showImage?: boolean;
@@ -13,14 +12,34 @@ type Props = {
 
 type Progress = { index: number; completed: boolean };
 
-function storageKey(reviewId: number) {
-  return `nook:readwise:${reviewId}`;
+const STORAGE_PREFIX = "nook:readwise:";
+
+function todayKey(): string {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = d.getMonth() + 1;
+  const day = d.getDate();
+  return `${y}-${m < 10 ? "0" : ""}${m}-${day < 10 ? "0" : ""}${day}`;
 }
 
-function loadProgress(reviewId: number): Progress {
+function storageKey(date: string) {
+  return `${STORAGE_PREFIX}${date}`;
+}
+
+function sweepOldKeys(keepDate: string) {
+  const keep = storageKey(keepDate);
+  for (let i = window.localStorage.length - 1; i >= 0; i--) {
+    const k = window.localStorage.key(i);
+    if (k && k.startsWith(STORAGE_PREFIX) && k !== keep) {
+      window.localStorage.removeItem(k);
+    }
+  }
+}
+
+function loadProgress(date: string): Progress {
   if (typeof window === "undefined") return { index: 0, completed: false };
   try {
-    const raw = window.localStorage.getItem(storageKey(reviewId));
+    const raw = window.localStorage.getItem(storageKey(date));
     if (!raw) return { index: 0, completed: false };
     const parsed = JSON.parse(raw) as Partial<Progress>;
     return {
@@ -32,9 +51,9 @@ function loadProgress(reviewId: number): Progress {
   }
 }
 
-function saveProgress(reviewId: number, p: Progress) {
+function saveProgress(date: string, p: Progress) {
   try {
-    window.localStorage.setItem(storageKey(reviewId), JSON.stringify(p));
+    window.localStorage.setItem(storageKey(date), JSON.stringify(p));
   } catch {
     // localStorage unavailable — silently ignore
   }
@@ -45,7 +64,6 @@ function pad2(n: number) {
 }
 
 export function ReadwiseClient({
-  reviewId,
   reviewUrl,
   highlights,
   showImage = false,
@@ -53,19 +71,23 @@ export function ReadwiseClient({
 }: Props) {
   const total = highlights.length;
   const [hydrated, setHydrated] = useState(false);
+  const [date, setDate] = useState<string>("");
   const [progress, setProgress] = useState<Progress>({
     index: 0,
     completed: false,
   });
 
   useEffect(() => {
-    const p = loadProgress(reviewId);
+    const d = todayKey();
+    sweepOldKeys(d);
+    const p = loadProgress(d);
+    setDate(d);
     setProgress({
       index: Math.min(p.index, Math.max(0, total - 1)),
       completed: p.completed && total > 0,
     });
     setHydrated(true);
-  }, [reviewId, total]);
+  }, [total]);
 
   const current = useMemo(
     () => highlights[progress.index],
@@ -73,11 +95,11 @@ export function ReadwiseClient({
   );
 
   const persist = useCallback(
-    (next: Progress) => {
-      setProgress(next);
-      saveProgress(reviewId, next);
+    (nextProgress: Progress) => {
+      setProgress(nextProgress);
+      if (date) saveProgress(date, nextProgress);
     },
-    [reviewId],
+    [date],
   );
 
   const next = useCallback(() => {
@@ -86,26 +108,26 @@ export function ReadwiseClient({
         p.index < total - 1
           ? { ...p, index: p.index + 1 }
           : { ...p, completed: true };
-      saveProgress(reviewId, np);
+      if (date) saveProgress(date, np);
       return np;
     });
-  }, [reviewId, total]);
+  }, [date, total]);
 
   const prev = useCallback(() => {
     setProgress((p) => {
       if (p.completed) {
         const np = { index: total - 1, completed: false };
-        saveProgress(reviewId, np);
+        if (date) saveProgress(date, np);
         return np;
       }
       if (p.index > 0) {
         const np = { ...p, index: p.index - 1 };
-        saveProgress(reviewId, np);
+        if (date) saveProgress(date, np);
         return np;
       }
       return p;
     });
-  }, [reviewId, total]);
+  }, [date, total]);
 
   const restart = useCallback(() => {
     persist({ index: 0, completed: false });

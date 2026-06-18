@@ -84,3 +84,13 @@ columns:
         # Dashboard → Users → pick a user → URL contains the userId,
         # or GET /Users with the API key
         userId: REPLACE_WITH_YOUR_JELLYFIN_USER_ID
+      - type: linkwarden
+        title: Bookmarks
+        baseUrl: https://linkwarden.your.domain
+        # Settings → Access Tokens
+        token: REPLACE_WITH_YOUR_LINKWARDEN_TOKEN
+        limit: 8 # recent saves shown (1–20)
+        search: true # show the search field with autocomplete; press `/` to focus
+        searchPlaceholder: Search bookmarks…
+        # collectionId: 3 # optional — scope recent + search to one collection
+        # tagId: 12 # optional — scope to one tag (combinable with collectionId)
